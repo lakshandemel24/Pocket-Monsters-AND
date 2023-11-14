@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         // Instantiate the navController using the NavHostFragment
         NavController navController = navHostFragment.getNavController();
 
+        //ciaooooo
+
     }
 
 }

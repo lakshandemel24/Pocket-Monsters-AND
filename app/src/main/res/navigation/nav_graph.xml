@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.pocketmonsters.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popExitAnim="@anim/nav_slide_out_right"
+            app:popEnterAnim="@anim/nav_slide_in_left"/>
+        <action
+            android:id="@+id/action_mainFragment_to_classificationFragment"
+            app:destination="@id/classificationFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popExitAnim="@anim/nav_slide_out_right"
+            app:popEnterAnim="@anim/nav_slide_in_left"/>
+        <action
+            android:id="@+id/action_mainFragment_to_monstersFragment"
+            app:destination="@id/monstersFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/classificationFragment"
+        android:name="com.example.pocketmonsters.ui.classification.ClassificationFragment"
+        android:label="fragment_classification"
+        tools:layout="@layout/fragment_classification" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.pocketmonsters.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/monstersFragment"
+        android:name="com.example.pocketmonsters.ui.vitualObj.monsters.MonstersFragment"
+        android:label="fragment_monsters"
+        tools:layout="@layout/fragment_monsters" />
+
+</navigation>

@@ -1,10 +1,12 @@
-package com.example.pocketmonsters;
+package com.example.pocketmonsters.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
+
+import com.example.pocketmonsters.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,9 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Instantiate the navController using the NavHostFragment
         NavController navController = navHostFragment.getNavController();
-
-        //miamoamoa
-
     }
 
 }

@@ -79,18 +79,48 @@ public class MainFragment extends Fragment {
         String sid = sharedPreferences.getString("sid", "default");
         int uid = sharedPreferences.getInt("uid", 0);
         if(sid.equals("default")) {
+            /*
             viewModel.setUser();
             editor.putString("sid", user.getSid());
             editor.putInt("uid", user.getUid());
             editor.apply();
             setUserDet();
+             */
+            editor.putString("sid", "ePzuGF55G6Z5ZRj6Vj7J");
+            editor.putInt("uid", 1007);
+            editor.apply();
         } else {
+
+            Log.d("MainFragment", sid);
+            Log.d("MainFragment", String.valueOf(uid));
+
+
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     viewModel.setUserDet(sid, uid);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    userName.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            setUserDet();
+                        }
+                    });
+
+                }
+            }).start();
+
+            /*
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+
 
                     userName.post(new Runnable() {
                         @Override
@@ -102,6 +132,7 @@ public class MainFragment extends Fragment {
 
                 }
             }).start();
+            */
 
         }
 

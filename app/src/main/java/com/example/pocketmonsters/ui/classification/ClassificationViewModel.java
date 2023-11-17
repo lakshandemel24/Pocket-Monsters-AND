@@ -14,12 +14,8 @@ public class ClassificationViewModel extends ViewModel {
         classificationModel = new ClassificationModel();
     }
 
-    public void appendPlayers(List<Player> pls) {
-        classificationModel.appendPlayers(pls);
-    }
-
-    public void getRenkingFromModel () {
-        classificationModel.getRankingUsers();
+    public void appendPlayers(List<Player> p) {
+        classificationModel.appendPlayers(p);
     }
 
     public int getPlayersCount() {

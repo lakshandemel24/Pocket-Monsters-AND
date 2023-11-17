@@ -1,5 +1,6 @@
 package com.example.pocketmonsters.ui.classification;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.api.ResponseUsersId;
@@ -30,11 +32,13 @@ import retrofit2.Callback;
 
 public class ClassificationFragment extends Fragment {
 
+    String sid;
+    SharedPreferences sharedPreferences;
     ClassificationViewModel viewModel;
+    ClassificationAdapter adapter;
+    ProgressBar progressBar;
 
     RetrofitProvider retrofitProvider = new RetrofitProvider();
-
-    String sid = "ePzuGF55G6Z5ZRj6Vj7J"; //to do
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,22 +63,21 @@ public class ClassificationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sharedPreferences = getActivity().getPreferences(getContext().MODE_PRIVATE);
+        sid = sharedPreferences.getString("sid", "default");
         viewModel = new ViewModelProvider(this).get(ClassificationViewModel.class);
+        progressBar = view.findViewById(R.id.progressBar);
 
-        List<Player> p = getAPi();
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ClassificationAdapter(getContext(), viewModel);
+        recyclerView.setAdapter(adapter);
 
-        Button btn = view.findViewById(R.id.button);
-        btn.setOnClickListener(v -> {
-            viewModel.appendPlayers(p);
-            RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            ClassificationAdapter adapter = new ClassificationAdapter(getContext(), viewModel);
-            recyclerView.setAdapter(adapter);
-        });
+        getAPi();
 
     }
 
-    public List<Player> getAPi() {
+    public void getAPi() {
 
         List<Player> players = new ArrayList<>();
 
@@ -99,14 +102,17 @@ public class ClassificationFragment extends Fragment {
                             }
                             ResponseUsersId resultUs = response.body();
                             players.add(new Player(resultUs.name, resultUs.experience, resultUs.life));
-                            Log.d("Lak", "Player: " + resultUs.name);
+                            if(players.size() == 20) {
+                                progressBar.setVisibility(View.GONE);
+                                viewModel.appendPlayers(players);
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                         @Override
                         public void onFailure(Call<ResponseUsersId> call, Throwable t) {
                             Log.d("Lak", "Error: " + t.getMessage());
                         }
                     });
-
                 }
             }
             @Override
@@ -114,7 +120,6 @@ public class ClassificationFragment extends Fragment {
                 Log.d("Api", "Error: " + t.getMessage());
             }
         });
-        return players;
     }
 
 }

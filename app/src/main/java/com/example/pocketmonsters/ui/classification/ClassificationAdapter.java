@@ -2,6 +2,7 @@ package com.example.pocketmonsters.ui.classification;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,23 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.api.ResponseUsersId;
+import com.example.pocketmonsters.api.ResponseUsersRanking;
+import com.example.pocketmonsters.api.RetrofitProvider;
+import com.example.pocketmonsters.models.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationViewHolder>{
 
     private LayoutInflater mInflater;
     private ClassificationViewModel viewModel;
+
 
     public ClassificationAdapter(Context context, ClassificationViewModel viewModel) {
         this.mInflater = LayoutInflater.from(context);
@@ -42,11 +55,13 @@ public class ClassificationAdapter extends RecyclerView.Adapter<ClassificationVi
             holder.itemView.setBackgroundColor(Color.parseColor("#3D5AFE"));
 
         holder.bind(viewModel.getPlayers(position));
+
     }
 
     @Override
     public int getItemCount() {
         return viewModel.getPlayersCount();
     }
+
 
 }

@@ -44,4 +44,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:3.14.9")
+
+    val room_version = "2.6.0"
+    implementation("androidx.room:room-guava:$room_version")
+    implementation("com.google.guava:guava:31.0.1-android")
 }

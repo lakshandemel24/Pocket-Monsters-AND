@@ -12,14 +12,6 @@ public class MainViewModel extends ViewModel {
         mainModel = new MainModel();
     }
 
-    public void setUser() {
-        mainModel.setUser();
-    }
-
-    public void setUserDet(String sid, int uid) {
-        mainModel.setUserDet(sid, uid);
-    }
-
     public User getUser() {
         return mainModel.getUser();
     }

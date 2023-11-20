@@ -33,9 +33,7 @@ import retrofit2.Call;
 public class MainFragment extends Fragment {
 
     MainViewModel viewModel;
-    User user;
-    private NavController navController;
-    RetrofitProvider retrofitProvider = new RetrofitProvider();
+    NavController navController;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     ImageButton btnProfile;
@@ -44,7 +42,6 @@ public class MainFragment extends Fragment {
     TextView userName;
     TextView userLevel;
     TextView userLife;
-    int userExp;
     ProgressBar progressExpBar;
 
     public MainFragment(){
@@ -62,87 +59,12 @@ public class MainFragment extends Fragment {
         userLevel = view.findViewById(R.id.userLevel);
         userLife = view.findViewById(R.id.userLife);
         progressExpBar = view.findViewById(R.id.progressExpBar);
-        initializeUser(); //TO DO - if new user, register
 
         btnProfile = view.findViewById(R.id.buttonProfile);
         btnMonsters = view.findViewById(R.id.buttonMonsters);
         btnClassification = view.findViewById(R.id.buttonClassification);
         setNavBtn();
 
-    }
-
-    public void initializeUser() {
-
-        sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-
-        String sid = sharedPreferences.getString("sid", "default");
-        int uid = sharedPreferences.getInt("uid", 0);
-        if(sid.equals("default")) {
-            /*
-            viewModel.setUser();
-            editor.putString("sid", user.getSid());
-            editor.putInt("uid", user.getUid());
-            editor.apply();
-            setUserDet();
-             */
-            editor.putString("sid", "ePzuGF55G6Z5ZRj6Vj7J");
-            editor.putInt("uid", 1007);
-            editor.apply();
-        } else {
-
-            Log.d("MainFragment", sid);
-            Log.d("MainFragment", String.valueOf(uid));
-
-
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    viewModel.setUserDet(sid, uid);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    userName.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            setUserDet();
-                        }
-                    });
-
-                }
-            }).start();
-
-            /*
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-
-
-
-                    userName.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //userName.setText(viewModel.getUser().getName());
-                            //setUserDet();
-                        }
-                    });
-
-                }
-            }).start();
-            */
-
-        }
-
-    }
-
-    public void setUserDet() {
-        userName.setText(viewModel.getUser().getName());
-        userLife.setText(String.valueOf(viewModel.getUser().getLife()));
-        userLevel.setText(String.valueOf(viewModel.getUser().getExperience()/100));
-        progressExpBar.setProgress(viewModel.getUser().getExperience()%100);
     }
 
     public void setNavBtn() {

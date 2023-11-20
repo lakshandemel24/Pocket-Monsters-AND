@@ -1,9 +1,14 @@
 package com.example.pocketmonsters.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "user")
 public class User {
 
-    private String sid;
+    @PrimaryKey
     private int uid;
+    private String sid;
     private String name;
     private double lat;
     private double lon;

@@ -9,9 +9,9 @@ public class ResponseUsersId {
         public String time;
         public int life;
         public int experience;;
-        public String weapon;
-        public String armor;
-        public String amulet;
+        public int weapon;
+        public int armor;
+        public int amulet;
         public String picture;
         public int profileversion;
         public boolean positionshare;

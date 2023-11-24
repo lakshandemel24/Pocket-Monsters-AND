@@ -3,106 +3,59 @@ package com.example.pocketmonsters.ui.profile;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.pocketmonsters.api.ObjectsResponseId;
 import com.example.pocketmonsters.api.ResponseUsersId;
 import com.example.pocketmonsters.api.RetrofitProvider;
 import com.example.pocketmonsters.api.SignUpResponse;
 import com.example.pocketmonsters.database.room.UserDBHelper;
 import com.example.pocketmonsters.models.User;
+import com.example.pocketmonsters.models.VirtualObj;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
 
 public class ProfileRepository {
 
-    private String sid;
-    public User user;
-    public int uid;
-
     RetrofitProvider retrofitProvider = new RetrofitProvider();
 
-    public void getUserRep(Context context, ProfileListener profileListener) {
+    List<VirtualObj> virtualObjList = new ArrayList<>();
 
-        UserDBHelper userDBHelper = new UserDBHelper(context);
+    public void getUserArtifacts(int[] uidObj, String sid, ProfileListener profileListener) {
 
-        if (userDBHelper.count() == 0) {
+        for (int i = 0; i < 3; i++) {
 
-            Call<SignUpResponse> call = retrofitProvider.getApiInterface().register();
-            call.enqueue(new retrofit2.Callback<SignUpResponse>() {
+            if(uidObj[i] == 0) {
+                continue;
+            }
+
+            Call<ObjectsResponseId> call = retrofitProvider.getApiInterface().getObject(uidObj[i], sid);
+            call.enqueue(new Callback<ObjectsResponseId>() {
                 @Override
-                public void onResponse(Call<SignUpResponse> call, retrofit2.Response<SignUpResponse> response) {
-                    if(!response.isSuccessful()) {
+                public void onResponse(Call<ObjectsResponseId> call, retrofit2.Response<ObjectsResponseId> response) {
+                    if (!response.isSuccessful()) {
                         Log.d("Lak-ProfileRepository", "Error: " + response.code());
                         return;
                     }
-                    SignUpResponse signUpResponse = response.body();
-                    Log.d("Lak-ProfileRepository", "New sid: " + signUpResponse.sid);
-                    Log.d("Lak-ProfileRepository", "New uid: " + signUpResponse.uid);
-                    uid = signUpResponse.uid; //1007
-                    sid = signUpResponse.sid; //ZhyeEJ5lbtgFJ5BFBTvi
+                    ObjectsResponseId result = response.body();
+                    Log.d("Lak-ProfileRepository", "ID: " + result.id);
+                    Log.d("Lak-ProfileRepository", "Type: " + result.type);
+                    Log.d("Lak-ProfileRepository", "Name: " + result.name);
+                    Log.d("Lak-ProfileRepository", "Level: " + result.level);
+                    Log.d("Lak-ProfileRepository", "Image: " + result.image);
+                    Log.d("Lak-ProfileRepository", "Lat: " + result.lat);
+                    Log.d("Lak-ProfileRepository", "Lon: " + result.lon);
 
-                    Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(uid, sid);
-                    call2.enqueue(new retrofit2.Callback<ResponseUsersId>() {
-                        @Override
-                        public void onResponse(Call<ResponseUsersId> call, retrofit2.Response<ResponseUsersId> response) {
-                            if(!response.isSuccessful()) {
-                                Log.d("ProfileRepository", "Error: " + response.code());
-                                return;
-                            }
-                            ResponseUsersId responseUsersId = response.body();
-                            user = new User(sid, uid, responseUsersId.name, responseUsersId.lat, responseUsersId.lon, responseUsersId.time, responseUsersId.life, responseUsersId.experience, responseUsersId.weapon, responseUsersId.armor, responseUsersId.amulet, responseUsersId.picture, responseUsersId.profileversion, responseUsersId.positionshare);
-                            profileListener.onSuccess(user);
-                            userDBHelper.insertUser(user);
-                            Log.d("Lak-ProfileRepository", "Name: " + responseUsersId.name);
-                            Log.d("Lak-ProfileRepository", "Experience: " + responseUsersId.experience);
-                            Log.d("Lak-ProfileRepository", "Life: " + responseUsersId.life);
-                        }
-                        @Override
-                        public void onFailure(Call<ResponseUsersId> call, Throwable t) {
-                            Log.d("Lak-ProfileRepository", "onFailure: " + t.getMessage());
-                        }
-                    });
+                    virtualObjList.add(new VirtualObj(result.id, result.name, result.type, result.level, result.image));
+                    profileListener.onSuccess(virtualObjList);
 
                 }
                 @Override
-                public void onFailure(Call<SignUpResponse> call, Throwable t) {
-                    Log.d("ProfileRepository", "onFailure: " + t.getMessage());
-                }
-            });
-
-        } else {
-
-            //TO DO: check profileversion and update if needed
-            sid = userDBHelper.getUser().getSid();
-            uid = userDBHelper.getUser().getUid();
-
-            //sid = "ZhyeEJ5lbtgFJ5BFBTvi";
-            //uid = 1007;
-
-            Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(uid, sid);
-            call2.enqueue(new retrofit2.Callback<ResponseUsersId>() {
-                @Override
-                public void onResponse(Call<ResponseUsersId> call, retrofit2.Response<ResponseUsersId> response) {
-                    if(!response.isSuccessful()) {
-                        Log.d("ProfileRepository", "Error: " + response.code());
-                        return;
-                    }
-                    ResponseUsersId responseUsersId = response.body();
-                    user = new User(sid, uid, responseUsersId.name, responseUsersId.lat, responseUsersId.lon, responseUsersId.time, responseUsersId.life, responseUsersId.experience, responseUsersId.weapon, responseUsersId.armor, responseUsersId.amulet, responseUsersId.picture, responseUsersId.profileversion, responseUsersId.positionshare);
-
-                    if(userDBHelper.getUser().getProfileversion() != user.getProfileversion()) {
-                        userDBHelper.clearUsers();
-                        userDBHelper.insertUser(user);
-                        profileListener.onSuccess(user);
-                    } else {
-                        profileListener.onSuccess(user);
-                    }
-
-                    Log.d("Lak-ProfileRepository", "Name: " + responseUsersId.name);
-                    Log.d("Lak-ProfileRepository", "Experience: " + responseUsersId.experience);
-                    Log.d("Lak-ProfileRepository", "Life: " + responseUsersId.life);
-                }
-                @Override
-                public void onFailure(Call<ResponseUsersId> call, Throwable t) {
-                    Log.d("Lak-ProfileRepository", "onFailure: " + t.getMessage());
+                public void onFailure(Call<ObjectsResponseId> call, Throwable t) {
+                    Log.d("Lak", "Error: " + t.getMessage());
+                    profileListener.onFailure();
                 }
             });
 

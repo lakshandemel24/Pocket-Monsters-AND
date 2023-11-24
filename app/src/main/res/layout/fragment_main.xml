@@ -130,15 +130,19 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginLeft="20dp">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 app:cardCornerRadius="100dp"
+                app:cardElevation="20dp"
+                android:outlineSpotShadowColor="#7B1FA2"
                 app:layout_constraintBottom_toTopOf="@+id/userName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:strokeWidth="2dp"
+                app:strokeColor="#1B5E20">
 
                 <ImageButton
                     android:id="@+id/buttonProfile"
@@ -148,14 +152,14 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/userdeafult" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/userLevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="13dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/progressExpBar"
@@ -170,7 +174,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="20dp"
                 android:progress="0"
-                android:progressBackgroundTint="@color/white"
+                android:progressBackgroundTint="@color/black"
                 android:progressTint="#00BCD4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -181,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UserName"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/progressExpBar"

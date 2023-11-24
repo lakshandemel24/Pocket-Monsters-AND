@@ -1,19 +1,10 @@
 package com.example.pocketmonsters.ui.main;
 
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-
-import android.os.SharedMemory;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,30 +13,38 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.pocketmonsters.R;
-import com.example.pocketmonsters.api.ResponseUsersId;
-import com.example.pocketmonsters.api.SignUpResponse;
-import com.example.pocketmonsters.api.RetrofitProvider;
-import com.example.pocketmonsters.models.User;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
-import retrofit2.Call;
+import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.databinding.FragmentMainBinding;
+import com.example.pocketmonsters.ui.SharedViewModel;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainFragment extends Fragment {
 
+    private FragmentMainBinding binding;
+    SharedViewModel sharedViewModel;
     MainViewModel viewModel;
     NavController navController;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    ImageButton btnProfile;
-    Button btnMonsters;
-    ImageButton btnClassification;
-    TextView userName;
-    TextView userLevel;
-    TextView userLife;
-    ProgressBar progressExpBar;
 
-    public MainFragment(){
-        super(R.layout.fragment_main);
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+    }
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMainBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
     }
 
     @Override
@@ -53,25 +52,30 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         this.navController = Navigation.findNavController(view);
 
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        userName = view.findViewById(R.id.userName);
-        userLevel = view.findViewById(R.id.userLevel);
-        userLife = view.findViewById(R.id.userLife);
-        progressExpBar = view.findViewById(R.id.progressExpBar);
-
-        btnProfile = view.findViewById(R.id.buttonProfile);
-        btnMonsters = view.findViewById(R.id.buttonMonsters);
-        btnClassification = view.findViewById(R.id.buttonClassification);
         setNavBtn();
+
+        sharedViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
+            if (user != null) {
+                binding.userName.setText(user.getName());
+                binding.userLife.setText(String.valueOf(user.getLife()));
+                binding.userLevel.setText(String.valueOf(user.getExperience()/100));
+                binding.progressExpBar.setProgress(user.getExperience() % 100);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] imageBytes = baos.toByteArray();
+                imageBytes = Base64.decode(user.getPicture(), Base64.DEFAULT);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                binding.buttonProfile.setImageBitmap(bitmap);
+            }
+        });
 
     }
 
     public void setNavBtn() {
 
-        btnProfile.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_profileFragment));
-        btnMonsters.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_monstersFragment));
-        btnClassification.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_classificationFragment));
+        binding.buttonProfile.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_profileFragment));
+        binding.buttonMonsters.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_monstersFragment));
+        binding.buttonClassification.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_classificationFragment));
 
     }
 

@@ -12,6 +12,8 @@ public class MainViewModel extends ViewModel {
         mainModel = new MainModel();
     }
 
+
+
     public User getUser() {
         return mainModel.getUser();
     }

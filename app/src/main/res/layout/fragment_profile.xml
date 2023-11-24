@@ -46,24 +46,30 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardView"
                     android:layout_width="125dp"
                     android:layout_height="125dp"
                     android:layout_gravity="center_horizontal"
+
                     app:cardCornerRadius="100dp"
+                    app:cardElevation="20dp"
+                    android:outlineSpotShadowColor="#00E676"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView2">
+                    app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="#1B5E20">
 
                     <ImageView
                         android:id="@+id/userImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/userdeafult"/>
+                        android:src="@drawable/userdeafult"
+                        android:scaleType="fitCenter"/>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:id="@+id/userLife"
@@ -103,6 +109,20 @@
                     app:layout_constraintStart_toStartOf="@+id/cardView"
                     app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
+                <ImageButton
+                    android:id="@+id/editProfile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="#00FFFFFF"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/edit"
+                    app:layout_constraintBottom_toBottomOf="@+id/cardView"
+                    app:layout_constraintStart_toEndOf="@+id/cardView"
+                    app:layout_constraintTop_toTopOf="@+id/cardView"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="5dp"/>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -111,7 +131,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:id="@+id/userLv"
+                    android:id="@+id/userLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -153,13 +173,13 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp">
+                android:layout_height="200dp">
 
                 <TextView
                     android:id="@+id/artefattiCont"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ARTEFATTI"
+                    android:text="ARTIFACTS"
                     android:textColor="#3F51B5"
                     android:textSize="15dp"
                     android:textStyle="bold"
@@ -167,16 +187,132 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/try1"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
+                <ImageButton
+                    android:id="@+id/weapon"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="@+id/armor"
+                    app:layout_constraintEnd_toStartOf="@+id/armor"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/artefattiCont" />
+                    app:layout_constraintTop_toTopOf="@+id/armor"
+                    android:background="#00FFFFFF"/>
 
-                <!-- to do artefatti 3 images -->
+                <TextView
+                    android:id="@+id/w"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="WEAPON"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintEnd_toEndOf="@+id/weapon"
+                    app:layout_constraintStart_toStartOf="@+id/weapon"
+                    app:layout_constraintTop_toBottomOf="@+id/weapon" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/w"
+                    app:layout_constraintEnd_toEndOf="@+id/weapon"
+                    app:layout_constraintStart_toStartOf="@+id/weapon"
+                    app:layout_constraintTop_toTopOf="@+id/weapon" />
+
+                <TextView
+                    android:id="@+id/textViewWeapon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/weapon"
+                    app:layout_constraintEnd_toEndOf="@+id/weapon"
+                    app:layout_constraintStart_toStartOf="@+id/weapon"
+                    app:layout_constraintTop_toTopOf="@+id/weapon" />
+
+
+                <ImageButton
+                    android:id="@+id/armor"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="#00FFFFFF"/>
+
+                <TextView
+                    android:id="@+id/ar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ARMOR"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintEnd_toEndOf="@+id/armor"
+                    app:layout_constraintStart_toStartOf="@+id/armor"
+                    app:layout_constraintTop_toBottomOf="@+id/armor" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/ar"
+                    app:layout_constraintEnd_toEndOf="@+id/armor"
+                    app:layout_constraintStart_toStartOf="@+id/armor"
+                    app:layout_constraintTop_toTopOf="@+id/armor" />
+
+                <TextView
+                    android:id="@+id/textViewArmor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/armor"
+                    app:layout_constraintEnd_toEndOf="@+id/armor"
+                    app:layout_constraintStart_toStartOf="@+id/armor"
+                    app:layout_constraintTop_toTopOf="@+id/armor" />
+
+                <ImageButton
+                    android:id="@+id/amulet"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="@+id/armor"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/armor"
+                    app:layout_constraintTop_toTopOf="@+id/armor"
+                    android:background="#00FFFFFF"/>
+
+                <TextView
+                    android:id="@+id/am"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AMULET"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintEnd_toEndOf="@+id/amulet"
+                    app:layout_constraintStart_toStartOf="@+id/amulet"
+                    app:layout_constraintTop_toBottomOf="@+id/amulet" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar3"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/am"
+                    app:layout_constraintEnd_toEndOf="@+id/amulet"
+                    app:layout_constraintStart_toStartOf="@+id/amulet"
+                    app:layout_constraintTop_toTopOf="@+id/amulet" />
+
+                <TextView
+                    android:id="@+id/textViewAmulet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/amulet"
+                    app:layout_constraintEnd_toEndOf="@+id/amulet"
+                    app:layout_constraintStart_toStartOf="@+id/amulet"
+                    app:layout_constraintTop_toTopOf="@+id/amulet" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

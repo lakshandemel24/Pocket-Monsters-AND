@@ -15,14 +15,14 @@ public class User {
     private String time;
     private int life;
     private int experience;;
-    private String weapon;
-    private String armor;
-    private String amulet;
+    private int weapon;
+    private int armor;
+    private int amulet;
     private String picture;
     private int profileversion;
     private boolean positionshare;
 
-    public User(String sid, int uid, String name, double lat, double lon, String time, int life, int experience, String weapon, String armor, String amulet, String picture, int profileversion, boolean positionshare) {
+    public User(String sid, int uid, String name, double lat, double lon, String time, int life, int experience, int weapon, int armor, int amulet, String picture, int profileversion, boolean positionshare) {
         this.sid = sid;
         this.uid = uid;
         this.name = name;
@@ -71,15 +71,15 @@ public class User {
         return experience;
     }
 
-    public String getWeapon() {
+    public int getWeapon() {
         return weapon;
     }
 
-    public String getArmor() {
+    public int getArmor() {
         return armor;
     }
 
-    public String getAmulet() {
+    public int getAmulet() {
         return amulet;
     }
 
@@ -93,5 +93,13 @@ public class User {
 
     public boolean isPositionshare() {
         return positionshare;
+    }
+
+    public int[] getArtifacts() {
+        int[] artifacts = new int[3];
+        artifacts[0] = weapon;
+        artifacts[1] = armor;
+        artifacts[2] = amulet;
+        return artifacts;
     }
 }

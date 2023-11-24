@@ -1,11 +1,11 @@
 package com.example.pocketmonsters.api;
 
 public class ObjectsResponseId {
-    int id;
-    String type;
-    String name;
-    int level;
-    String image;
-    double lat;
-    double lon;
+    public int id;
+    public String type;
+    public String name;
+    public int level;
+    public String image;
+    public double lat;
+    public double lon;
 }

@@ -25,8 +25,12 @@
             app:popExitAnim="@anim/nav_slide_out_right"
             app:popEnterAnim="@anim/nav_slide_in_left"/>
         <action
-            android:id="@+id/action_mainFragment_to_monstersFragment"
-            app:destination="@id/monstersFragment" />
+            android:id="@+id/action_mainFragment_to_nearbyFragment"
+            app:destination="@id/nearbyFragment"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popExitAnim="@anim/nav_slide_out_right"
+            app:popEnterAnim="@anim/nav_slide_in_left"/>
     </fragment>
 
     <fragment
@@ -43,9 +47,9 @@
     </fragment>
 
     <fragment
-        android:id="@+id/monstersFragment"
-        android:name="com.example.pocketmonsters.ui.vitualObj.monsters.MonstersFragment"
+        android:id="@+id/nearbyFragment"
+        android:name="com.example.pocketmonsters.ui.nearby.NearbyFragment"
         android:label="fragment_monsters"
-        tools:layout="@layout/fragment_monsters" />
+        tools:layout="@layout/fragment_nearby" />
 
 </navigation>

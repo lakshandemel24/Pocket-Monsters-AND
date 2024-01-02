@@ -7,7 +7,7 @@
     tools:context=".ui.main.MainFragment"
     android:background="@drawable/map">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/hide">
@@ -34,13 +34,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <Button
+                    android:id="@+id/buttonNearby"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:backgroundTint="#2E2E2E"
+                    android:text="nearby"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <TextView
                     android:id="@+id/userLife"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="0"
-                    android:textColor="@color/black"
+                    android:textColor="@color/white"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/userLifeLogo"
@@ -61,88 +74,26 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="0dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_horizontal">
-
-                        <Button
-                            android:id="@+id/buttonMonsters"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:text="monsters"
-                            android:textStyle="italic"
-                            android:backgroundTint="#2E2E2E"
-                            android:layout_marginLeft="5dp"
-                            android:textColor="#FFFFFF"
-                            />
-
-                        <Button
-                            android:id="@+id/buttonArtefatti"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:text="artifacts"
-                            android:layout_marginLeft="5dp"
-                            android:textStyle="italic"
-                            android:backgroundTint="#2E2E2E"
-                            android:textColor="#FFFFFF"/>
-
-
-                        <Button
-                            android:id="@+id/buttonCaramelle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:text="candies"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:backgroundTint="#2E2E2E"
-                            android:textStyle="italic"
-                            android:textColor="#FFFFFF"/>
-
-                    </LinearLayout>
-
-
-                </HorizontalScrollView>
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
 
         <!-- Profile -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="20dp">
+            app:layout_constraintStart_toStartOf="parent">
 
-            <com.google.android.material.card.MaterialCardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 app:cardCornerRadius="100dp"
-                app:cardElevation="20dp"
-                android:outlineSpotShadowColor="#7B1FA2"
                 app:layout_constraintBottom_toTopOf="@+id/userName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:strokeWidth="2dp"
-                app:strokeColor="#1B5E20">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <ImageButton
                     android:id="@+id/buttonProfile"
@@ -152,14 +103,14 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/userdeafult" />
 
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
 
             <TextView
                 android:id="@+id/userLevel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="13dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/progressExpBar"
@@ -174,7 +125,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="20dp"
                 android:progress="0"
-                android:progressBackgroundTint="@color/black"
+                android:progressBackgroundTint="@color/white"
                 android:progressTint="#00BCD4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -185,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UserName"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/progressExpBar"
@@ -195,6 +146,28 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageButton
+                android:id="@+id/buttonLocation"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="30dp"
+                android:background="#00FFFFFF"
+                android:scaleType="fitCenter"
+                android:src="@drawable/mypos"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

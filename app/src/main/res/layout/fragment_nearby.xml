@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragmentMonsters"
-    tools:context=".ui.vitualObj.monsters.MonstersFragment"
-    android:background="#B6B6B6">
+    tools:context=".ui.nearby.NearbyFragment"
+    android:background="@drawable/gradient_violet">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -43,14 +43,18 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="MOSTRI"
+                    android:gravity="center"
+                    android:text="NEARBY VIRTUAL OBJECTS"
+                    android:textColor="#FFFFFF"
                     android:textSize="25dp"
-                    android:textColor="#000000"
-                    android:textStyle="bold"
-                    android:gravity="center"/>
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

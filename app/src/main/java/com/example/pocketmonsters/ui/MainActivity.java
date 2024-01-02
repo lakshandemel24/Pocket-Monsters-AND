@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void registerUSerName(User user) {
+
         //TO DO: dialog with edit text -> server patch -> update user in DB
 
         viewModel.setUser(user);

@@ -74,7 +74,7 @@ public class MainFragment extends Fragment {
     public void setNavBtn() {
 
         binding.buttonProfile.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_profileFragment));
-        binding.buttonMonsters.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_monstersFragment));
+        binding.buttonNearby.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_nearbyFragment));
         binding.buttonClassification.setOnClickListener(v -> navController.navigate(R.id.action_mainFragment_to_classificationFragment));
 
     }

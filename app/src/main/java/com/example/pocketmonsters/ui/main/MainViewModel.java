@@ -13,7 +13,6 @@ public class MainViewModel extends ViewModel {
     }
 
 
-
     public User getUser() {
         return mainModel.getUser();
     }

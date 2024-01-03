@@ -78,27 +78,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
-        /*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] imageBytes = baos.toByteArray();
-                imageBytes = Base64.decode(tryImg, Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                tryImage.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tryImage.setImageBitmap(bitmap);
-                    }
-                });
-            }
-        }).start();
-         */
-
-
     }
 
 }

@@ -37,4 +37,8 @@ public interface ApiInterface {
     @GET("ranking")
     Call<List<ResponseUsersRanking>> getRanking(@Query("sid") String sid);
 
+    @PATCH("users/{id}")
+    @FormUrlEncoded
+    Call<JsonElement> editUSer(@Path("id") int id, @Field("sid") String sid, @Field("name") String name, @Field("picture") String picture, @Field("positionshare") boolean positionshare);
+
 }

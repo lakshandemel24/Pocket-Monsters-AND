@@ -102,4 +102,8 @@ public class User {
         artifacts[2] = amulet;
         return artifacts;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

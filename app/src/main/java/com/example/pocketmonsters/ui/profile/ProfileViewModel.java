@@ -46,8 +46,7 @@ public class ProfileViewModel extends ViewModel {
             public void onSuccess(List<VirtualObj> list) {
                 profileModel.setVirtualObj(list);
 
-                for (VirtualObj virtualObj :
-                        list) {
+                for (VirtualObj virtualObj : list) {
                      if (virtualObj.getType().equals("weapon")) {
                          if(virtualObj.getImage() != null) {
                              weaponProgress.setVisibility(ProgressBar.INVISIBLE);

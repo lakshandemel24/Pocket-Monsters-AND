@@ -61,11 +61,14 @@ public class MainFragment extends Fragment {
                 binding.userLevel.setText(String.valueOf(user.getExperience()/100));
                 binding.progressExpBar.setProgress(user.getExperience() % 100);
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] imageBytes = baos.toByteArray();
-                imageBytes = Base64.decode(user.getPicture(), Base64.DEFAULT);
-                Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-                binding.buttonProfile.setImageBitmap(bitmap);
+                if(user.getPicture() != null) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    byte[] imageBytes = baos.toByteArray();
+                    imageBytes = Base64.decode(user.getPicture(), Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                    binding.buttonProfile.setImageBitmap(bitmap);
+                }
+
             }
         });
 

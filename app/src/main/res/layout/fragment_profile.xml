@@ -8,16 +8,9 @@
     android:background="#FFFFFF"
     android:id="@+id/containerProfile">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="42dp"
-        tools:layout_editor_absoluteY="353dp">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,22 +45,22 @@
                     android:layout_height="125dp"
                     android:layout_gravity="center_horizontal"
 
+                    android:outlineSpotShadowColor="#00E676"
                     app:cardCornerRadius="100dp"
                     app:cardElevation="20dp"
-                    android:outlineSpotShadowColor="#00E676"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView2"
                     app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                    app:strokeWidth="2dp"
-                    app:strokeColor="#1B5E20">
+                    app:strokeColor="#1B5E20"
+                    app:strokeWidth="2dp">
 
                     <ImageView
                         android:id="@+id/userImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/userdeafult"
-                        android:scaleType="fitCenter"/>
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/userdeafult" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -77,24 +70,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="0"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/userLifeLogo"
                     app:layout_constraintEnd_toStartOf="@+id/userLifeLogo"
-                    app:layout_constraintTop_toTopOf="@+id/userLifeLogo"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    app:layout_constraintTop_toTopOf="@+id/userLifeLogo" />
 
                 <ImageButton
                     android:id="@+id/userLifeLogo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     android:src="@drawable/heart"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/userName"
@@ -113,14 +106,27 @@
                     android:id="@+id/editProfile"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="20dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     android:src="@drawable/edit"
                     app:layout_constraintBottom_toBottomOf="@+id/cardView"
                     app:layout_constraintStart_toEndOf="@+id/cardView"
-                    app:layout_constraintTop_toTopOf="@+id/cardView"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="5dp"/>
+                    app:layout_constraintTop_toTopOf="@+id/cardView" />
+
+                <ImageButton
+                    android:id="@+id/editProfileName"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="#00FFFFFF"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/edit"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/userName"
+                    app:layout_constraintStart_toEndOf="@+id/userName"
+                    app:layout_constraintTop_toTopOf="@+id/userName"
+                    app:layout_constraintVertical_bias="1.0" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -173,7 +179,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/artefattiCont"
@@ -191,12 +197,12 @@
                     android:id="@+id/weapon"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="@+id/armor"
                     app:layout_constraintEnd_toStartOf="@+id/armor"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/armor"
-                    android:background="#00FFFFFF"/>
+                    app:layout_constraintTop_toTopOf="@+id/armor" />
 
                 <TextView
                     android:id="@+id/w"
@@ -234,12 +240,12 @@
                     android:id="@+id/armor"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:background="#00FFFFFF"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/ar"
@@ -276,12 +282,12 @@
                     android:id="@+id/amulet"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     app:layout_constraintBottom_toBottomOf="@+id/armor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/armor"
-                    app:layout_constraintTop_toTopOf="@+id/armor"
-                    android:background="#00FFFFFF"/>
+                    app:layout_constraintTop_toTopOf="@+id/armor" />
 
                 <TextView
                     android:id="@+id/am"
@@ -316,8 +322,21 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </ScrollView>
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/posSharingSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Position sharing  "
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

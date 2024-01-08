@@ -40,13 +40,6 @@ public class ProfileRepository {
                         return;
                     }
                     ObjectsResponseId result = response.body();
-                    Log.d("Lak-ProfileRepository", "ID: " + result.id);
-                    Log.d("Lak-ProfileRepository", "Type: " + result.type);
-                    Log.d("Lak-ProfileRepository", "Name: " + result.name);
-                    Log.d("Lak-ProfileRepository", "Level: " + result.level);
-                    Log.d("Lak-ProfileRepository", "Image: " + result.image);
-                    Log.d("Lak-ProfileRepository", "Lat: " + result.lat);
-                    Log.d("Lak-ProfileRepository", "Lon: " + result.lon);
 
                     virtualObjList.add(new VirtualObj(result.id, result.name, result.type, result.level, result.image));
                     profileListener.onSuccess(virtualObjList);
@@ -54,7 +47,7 @@ public class ProfileRepository {
                 }
                 @Override
                 public void onFailure(Call<ObjectsResponseId> call, Throwable t) {
-                    Log.d("Lak", "Error: " + t.getMessage());
+                    Log.d("Lak-ProfileRepository", "Error: " + t.getMessage());
                     profileListener.onFailure();
                 }
             });

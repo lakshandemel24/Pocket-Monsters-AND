@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.databinding.FragmentMainBinding;
 import com.example.pocketmonsters.databinding.FragmentProfileBinding;
+import com.example.pocketmonsters.models.User;
 import com.example.pocketmonsters.models.VirtualObj;
 import com.example.pocketmonsters.ui.SharedViewModel;
 import com.example.pocketmonsters.ui.main.MainViewModel;
@@ -85,6 +86,7 @@ public class ProfileFragment extends Fragment {
 
         sharedViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
+                Log.d("Lak-ProfileFragment", "Position sharing: " + user.isPositionshare());
                 binding.userName.setText(user.getName());
                 binding.userLife.setText(String.valueOf(user.getLife()));
                 binding.userLevel.setText("LIVELLO " + String.valueOf(user.getExperience()/100));
@@ -93,20 +95,33 @@ public class ProfileFragment extends Fragment {
                 binding.posSharingSwitch.setChecked(user.isPositionshare());
 
                 if(user.getPicture() != null) {
+
+                    /*
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     byte[] imageBytes = baos.toByteArray();
                     imageBytes = Base64.decode(user.getPicture(), Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                     binding.userImage.setImageBitmap(bitmap);
+                    */
+
+                    byte[] imageByteArray = Base64.decode(user.getPicture(), Base64.DEFAULT);
+
+                    Glide.with(getContext())
+                            .asBitmap()
+                            .load(imageByteArray)
+                            .into(binding.userImage);
+
                 }
 
                 profileViewModel.setUserArtifacts(user.getArtifacts(), user.getSid(), binding.weapon, binding.armor, binding.amulet, binding.progressBar1, binding.progressBar2, binding.progressBar3, binding.textViewWeapon, binding.textViewArmor, binding.textViewAmulet, getContext());
 
                 binding.posSharingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if(isChecked) {
-                        profileViewModel.setPosSharing(true, user.getSid(), user.getUid());
+                        profileViewModel.setPosSharing(true, user.getSid(), user.getUid(), getContext());
+                        sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), true));
                     } else {
-                        profileViewModel.setPosSharing(false, user.getSid(), user.getUid());
+                        profileViewModel.setPosSharing(false, user.getSid(), user.getUid(), getContext());
+                        sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), false));
                     }
                 });
 
@@ -127,8 +142,12 @@ public class ProfileFragment extends Fragment {
                             .setPositiveButton("OK", (dialog, which) -> {
                                 EditText userInput = ((Dialog) dialog).findViewById(R.id.etUserInput);
                                 String name = userInput.getText().toString();
-                                //sharedViewModel.setUser(new User(user.getSid(), user.getUid(), name, user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), user.isPositionshare()));
-
+                                if(name.isEmpty()) {
+                                    Toast.makeText(getContext(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                profileViewModel.changeUserName(user.getSid(), user.getUid(), name, user.isPositionshare());
+                                sharedViewModel.setUser(new User(user.getSid(), user.getUid(), name, user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), user.isPositionshare()));
                             })
                             .setView(R.layout.dialog_name)
                             .setCancelable(false)

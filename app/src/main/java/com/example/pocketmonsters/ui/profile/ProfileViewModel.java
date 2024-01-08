@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.api.RetrofitProvider;
+import com.example.pocketmonsters.database.room.UserDBHelper;
 import com.example.pocketmonsters.models.User;
 import com.example.pocketmonsters.models.VirtualObj;
 import com.example.pocketmonsters.ui.SharedViewModel;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import kotlinx.coroutines.flow.SharingStarted;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -62,7 +64,6 @@ public class ProfileViewModel extends ViewModel {
         armorProgress.setVisibility(ProgressBar.INVISIBLE);
         amuletProgress.setVisibility(ProgressBar.INVISIBLE);
 
-
         profileRepository.getUserArtifacts(uidObj, sid, new ProfileListener() {
             @Override
             public void onSuccess(List<VirtualObj> list) {
@@ -71,6 +72,7 @@ public class ProfileViewModel extends ViewModel {
                 for (VirtualObj virtualObj : list) {
 
                      if (virtualObj.getType().equals("weapon")) {
+                         weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                          if(virtualObj.getImage() != null) {
                              weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -81,6 +83,7 @@ public class ProfileViewModel extends ViewModel {
                          } else {
                                 weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                                 weaponName.setText(virtualObj.getName());
+                             weapon.setImageBitmap(null);
                          }
 
                          weapon.setOnClickListener(v -> {
@@ -88,6 +91,7 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("armor")) {
+                         armorProgress.setVisibility(ProgressBar.INVISIBLE);
                          if(virtualObj.getImage() != null) {
                              armorProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -98,6 +102,7 @@ public class ProfileViewModel extends ViewModel {
                          } else {
                              armorProgress.setVisibility(ProgressBar.INVISIBLE);
                              armorName.setText(virtualObj.getName());
+                             armor.setImageBitmap(null);
                          }
 
                          armor.setOnClickListener(v -> {
@@ -105,6 +110,7 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("amulet")) {
+                         amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                          if(virtualObj.getImage() != null) {
                              amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -115,6 +121,7 @@ public class ProfileViewModel extends ViewModel {
                          } else {
                              amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                              amuletName.setText(virtualObj.getName());
+                             amulet.setImageBitmap(null);
                          }
 
                          amulet.setOnClickListener(v -> {
@@ -135,7 +142,7 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    public void setPosSharing(boolean posSharing, String sid, int uid) {
+    public void setPosSharing(boolean posSharing, String sid, int uid, Context context) {
 
         Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(uid, sid, null, null, posSharing);
         editUserCall.enqueue(new Callback<JsonElement>() {
@@ -155,11 +162,32 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
+    public void changeUserName(String sid, int uid, String name, boolean posSharing) {
+
+        Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(uid, sid, name, null, null);
+        editUserCall.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, retrofit2.Response<JsonElement> response) {
+                if (!response.isSuccessful()) {
+                    Log.d("Lak-ProfileViewModel", "Error: " + response.code());
+                    return;
+                }
+                Log.d("Lak-ProfileViewModel", "Name modified");
+
+            }
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.d("Lak-ProfileViewModel", "Error: " + t.getMessage());
+            }
+        });
+
+    }
+
     public void changeUserImage(Uri o, SharedViewModel sharedViewModel, Context context) {
 
         String img = uriToBase64(context, o);
 
-        Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(sharedViewModel.getUser().getValue().getUid(), sharedViewModel.getUser().getValue().getSid(), null, img, sharedViewModel.getUser().getValue().isPositionshare());
+        Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(sharedViewModel.getUser().getValue().getUid(), sharedViewModel.getUser().getValue().getSid(), null, img, null);
         editUserCall.enqueue(new Callback<JsonElement>() {
             @Override
             public void onResponse(Call<JsonElement> call, retrofit2.Response<JsonElement> response) {

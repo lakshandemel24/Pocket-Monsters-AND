@@ -202,7 +202,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/armor"
                     app:layout_constraintEnd_toStartOf="@+id/armor"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/armor" />
+                    app:layout_constraintTop_toTopOf="@+id/armor"
+                    android:src="@drawable/empty"/>
 
                 <TextView
                     android:id="@+id/w"
@@ -245,7 +246,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/empty"/>
 
                 <TextView
                     android:id="@+id/ar"
@@ -287,7 +289,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/armor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/armor"
-                    app:layout_constraintTop_toTopOf="@+id/armor" />
+                    app:layout_constraintTop_toTopOf="@+id/armor"
+                    android:src="@drawable/empty"/>
 
                 <TextView
                     android:id="@+id/am"

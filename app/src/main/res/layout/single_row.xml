@@ -25,12 +25,12 @@
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintEnd_toStartOf="@+id/profilePicture"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/profilePicture"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="3dp"
@@ -51,7 +51,7 @@
             android:textSize="20dp"
             android:textStyle="bold|italic"
             app:layout_constraintBottom_toTopOf="@+id/progressExpBar"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/profilePicture"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
@@ -75,7 +75,7 @@
             android:textColor="@color/white"
             android:textSize="10dp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintBottom_toBottomOf="@+id/profilePicture"
             app:layout_constraintStart_toStartOf="@+id/name" />
 
 

@@ -49,7 +49,7 @@ public class ClassificationRepository {
                                 return;
                             }
                             ResponseUsersId resultUs = response.body();
-                            players.add(new Player(resultUs.name, resultUs.experience, resultUs.life));
+                            players.add(new Player(resultUs.name, resultUs.experience, resultUs.life, resultUs.picture));
                             if(players.size() == 20) {
                                 classificationListener.onSuccess(players);
                             }

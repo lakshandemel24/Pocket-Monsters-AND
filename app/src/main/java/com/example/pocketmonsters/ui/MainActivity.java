@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     user.setName(name);
 
 
-                    Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(user.getUid(), user.getSid(), name, null, false);
+                    Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(user.getUid(), user.getSid(), name, null, null);
                     editUserCall.enqueue(new Callback<JsonElement>() {
                         @Override
                         public void onResponse(Call<JsonElement> call, retrofit2.Response<JsonElement> response) {

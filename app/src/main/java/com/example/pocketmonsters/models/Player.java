@@ -8,12 +8,14 @@ public class Player {
     private int expPoits;
     private int lifePoints;
     private int level;
+    private String profilePicture;
 
-    public Player(String name, int expPoits, int lifePoints) {
+    public Player(String name, int expPoits, int lifePoints, String profilePicture) {
         this.name = name;
         this.expPoits = expPoits;
         this.lifePoints = lifePoints;
         this.level = expPoits / 100;
+        this.profilePicture = profilePicture;
     }
 
     public String getName() {
@@ -30,6 +32,10 @@ public class Player {
 
     public int getLevel() {
         return level;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
 }

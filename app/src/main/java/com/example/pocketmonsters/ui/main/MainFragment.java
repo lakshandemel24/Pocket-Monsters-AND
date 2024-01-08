@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.databinding.FragmentMainBinding;
 import com.example.pocketmonsters.ui.SharedViewModel;
@@ -62,11 +63,21 @@ public class MainFragment extends Fragment {
                 binding.progressExpBar.setProgress(user.getExperience() % 100);
 
                 if(user.getPicture() != null) {
+                    /*
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     byte[] imageBytes = baos.toByteArray();
                     imageBytes = Base64.decode(user.getPicture(), Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                     binding.buttonProfile.setImageBitmap(bitmap);
+                     */
+
+                    byte[] imageByteArray = Base64.decode(user.getPicture(), Base64.DEFAULT);
+
+                    Glide.with(getContext())
+                            .asBitmap()
+                            .load(imageByteArray)
+                            .into(binding.buttonProfile);
+
                 }
 
             }

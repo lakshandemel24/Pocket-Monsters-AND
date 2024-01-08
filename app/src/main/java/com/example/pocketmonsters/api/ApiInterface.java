@@ -39,6 +39,6 @@ public interface ApiInterface {
 
     @PATCH("users/{id}")
     @FormUrlEncoded
-    Call<JsonElement> editUSer(@Path("id") int id, @Field("sid") String sid, @Field("name") String name, @Field("picture") String picture, @Field("positionshare") boolean positionshare);
+    Call<JsonElement> editUSer(@Path("id") int id, @Field("sid") String sid, @Field("name") String name, @Field("picture") String picture, @Field("positionshare") Boolean positionshare);
 
 }

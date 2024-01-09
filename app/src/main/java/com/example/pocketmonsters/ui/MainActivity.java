@@ -1,6 +1,7 @@
 package com.example.pocketmonsters.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -10,6 +11,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.api.ResponseUsersId;
@@ -18,6 +20,9 @@ import com.example.pocketmonsters.api.SignUpResponse;
 import com.example.pocketmonsters.database.room.UserDBHelper;
 import com.example.pocketmonsters.databinding.ActivityMainBinding;
 import com.example.pocketmonsters.models.User;
+import com.example.pocketmonsters.ui.main.MainFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.JsonElement;
@@ -28,6 +33,7 @@ import retrofit2.Callback;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Lak-MainActivity";
+    private static final int ERROR_DIALOG_REQUEST = 9001;
     private ActivityMainBinding binding;
     private SharedViewModel viewModel;
 
@@ -45,20 +51,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Get the navigation host fragment from this Activity
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        if(isServicesOK()){
+            Log.d(TAG, "onCreate: services are ok");
 
-        // Instantiate the navController using the NavHostFragment
-        NavController navController = navHostFragment.getNavController();
+            // Get the navigation host fragment from this Activity
+            NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
-        viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+            // Instantiate the navController using the NavHostFragment
+            NavController navController = navHostFragment.getNavController();
 
-        // Check sid
-        retrofitProvider = new RetrofitProvider();
-        userDBHelper = new UserDBHelper(this);
-        getUser();
+            viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
+            // Check sid
+            retrofitProvider = new RetrofitProvider();
+            userDBHelper = new UserDBHelper(this);
+            getUser();
 
 
+        }
+
+    }
+
+    public boolean isServicesOK(){
+        Log.d(TAG, "isServicesOK: checking google services version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+        if(available == ConnectionResult.SUCCESS){
+            //everything is fine and the user can make map requests
+            Log.d(TAG, "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
+            //an error occured but we can resolve it
+            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }else{
+            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 
     private void getUser() {
@@ -154,8 +186,13 @@ public class MainActivity extends AppCompatActivity {
 
                     EditText userInput = ((Dialog) dialog).findViewById(R.id.etUserInput);
                     String name = userInput.getText().toString();
-                    user.setName(name);
 
+                    if(name.isEmpty()) {
+                        Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    user.setName(name);
 
                     Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(user.getUid(), user.getSid(), name, null, null);
                     editUserCall.enqueue(new Callback<JsonElement>() {

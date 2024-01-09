@@ -16,6 +16,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PocketMonsters"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDtJFiy2VmsRk5gXelCTOKAfCyFcWbYsg0" />
+        <!--AIzaSyDtJFiy2VmsRk5gXelCTOKAfCyFcWbYsg0 (card)
+        AIzaSyCRdJ2i8a8CJ-A8ac5EtP8BS109PLZV-xU-->
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

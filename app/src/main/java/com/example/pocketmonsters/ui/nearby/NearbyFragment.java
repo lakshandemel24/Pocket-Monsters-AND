@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import android.widget.ImageButton;
 import com.example.pocketmonsters.R;
 
 public class NearbyFragment extends Fragment {
+
+    double lat;
+    double lon;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,9 +34,11 @@ public class NearbyFragment extends Fragment {
             getActivity().getSupportFragmentManager().popBackStack();
         });
 
+        lat = getArguments().getDouble("lat");
+        lon = getArguments().getDouble("lon");
+
         return viewMonsters;
     }
-
 
 
 }

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment"
-    android:background="@drawable/map">
+    tools:context=".ui.main.MainFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,15 +23,15 @@
 
                 <ImageButton
                     android:id="@+id/buttonClassification"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/cup"
+                    android:src="@drawable/cup2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Button
                     android:id="@+id/buttonNearby"
@@ -45,7 +44,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp"/>
 
                 <TextView
                     android:id="@+id/userLife"
@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:text="0"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="20dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/userLifeLogo"
@@ -65,6 +65,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
                     android:background="#00FFFFFF"
                     android:scaleType="fitCenter"
                     android:src="@drawable/heart"
@@ -110,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="13dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/progressExpBar"
@@ -125,7 +126,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginBottom="20dp"
                 android:progress="0"
-                android:progressBackgroundTint="@color/white"
+                android:progressBackgroundTint="@color/black"
                 android:progressTint="#00BCD4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -136,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UserName"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="17dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/progressExpBar"

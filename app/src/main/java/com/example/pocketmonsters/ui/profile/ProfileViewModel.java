@@ -60,10 +60,6 @@ public class ProfileViewModel extends ViewModel {
 
         ProfileRepository profileRepository = new ProfileRepository();
 
-        weaponProgress.setVisibility(ProgressBar.INVISIBLE);
-        armorProgress.setVisibility(ProgressBar.INVISIBLE);
-        amuletProgress.setVisibility(ProgressBar.INVISIBLE);
-
         profileRepository.getUserArtifacts(uidObj, sid, new ProfileListener() {
             @Override
             public void onSuccess(List<VirtualObj> list) {
@@ -71,8 +67,10 @@ public class ProfileViewModel extends ViewModel {
 
                 for (VirtualObj virtualObj : list) {
 
+                    amuletProgress.setVisibility(ProgressBar.INVISIBLE);
+
                      if (virtualObj.getType().equals("weapon")) {
-                         weaponProgress.setVisibility(ProgressBar.INVISIBLE);
+                         weaponProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
                              weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -91,7 +89,7 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("armor")) {
-                         armorProgress.setVisibility(ProgressBar.INVISIBLE);
+                         armorProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
                              armorProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -110,7 +108,7 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("amulet")) {
-                         amuletProgress.setVisibility(ProgressBar.INVISIBLE);
+                         amuletProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
                              amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -232,16 +230,6 @@ public class ProfileViewModel extends ViewModel {
             }
         }
         return null;
-    }
-
-    private String encodeImage(Bitmap bm)
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG,100,baos);
-        byte[] b = baos.toByteArray();
-        String encImage = Base64.encodeToString(b, Base64.DEFAULT);
-
-        return encImage;
     }
 
     private void showDialog(VirtualObj virtualObj, Context context) {

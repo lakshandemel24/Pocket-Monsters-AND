@@ -1,14 +1,9 @@
 package com.example.pocketmonsters.ui.profile;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.example.pocketmonsters.api.ObjectsResponseId;
-import com.example.pocketmonsters.api.ResponseUsersId;
 import com.example.pocketmonsters.api.RetrofitProvider;
-import com.example.pocketmonsters.api.SignUpResponse;
-import com.example.pocketmonsters.database.room.UserDBHelper;
-import com.example.pocketmonsters.models.User;
 import com.example.pocketmonsters.models.VirtualObj;
 
 import java.util.ArrayList;

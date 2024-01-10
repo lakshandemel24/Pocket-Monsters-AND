@@ -9,5 +9,4 @@ public interface ClassificationListener {
     public void onSuccess(List<Player> players);
     public void onFailure();
 
-
 }

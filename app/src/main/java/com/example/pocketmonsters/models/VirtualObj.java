@@ -1,19 +1,29 @@
 package com.example.pocketmonsters.models;
 
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "virtualObj")
 public class VirtualObj {
 
+    @PrimaryKey
     int id;
     String name;
     String type;
     int level;
     String image;
+    double lat;
+    double lon;
 
-    public VirtualObj(int id, String name, String type, int level, String image) {
+    public VirtualObj(int id, String name, String type, int level, String image, double lat, double lon) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.level = level;
         this.image = image;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public int getId() {

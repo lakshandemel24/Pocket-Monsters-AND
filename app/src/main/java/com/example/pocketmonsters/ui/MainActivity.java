@@ -1,13 +1,12 @@
 package com.example.pocketmonsters.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -17,10 +16,9 @@ import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.api.ResponseUsersId;
 import com.example.pocketmonsters.api.RetrofitProvider;
 import com.example.pocketmonsters.api.SignUpResponse;
-import com.example.pocketmonsters.database.room.UserDBHelper;
+import com.example.pocketmonsters.database.room.user.UserDBHelper;
 import com.example.pocketmonsters.databinding.ActivityMainBinding;
 import com.example.pocketmonsters.models.User;
-import com.example.pocketmonsters.ui.main.MainFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -36,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private ActivityMainBinding binding;
     private SharedViewModel viewModel;
+    SharedPreferences sharedPreferences;
 
     RetrofitProvider retrofitProvider;
     UserDBHelper userDBHelper;
@@ -111,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "New uid: " + signUpResponse.uid);
                     uid = signUpResponse.uid; //1007
                     sid = signUpResponse.sid; //"ePzuGF55G6Z5ZRj6Vj7J"
+
+                    sharedPreferences = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("sid", sid);
+                    editor.apply();
+
 //to remove!!!!!!!!!!
                     sid = "ePzuGF55G6Z5ZRj6Vj7J";
                     uid = 1007;

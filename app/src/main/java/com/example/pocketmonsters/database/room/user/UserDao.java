@@ -1,4 +1,4 @@
-package com.example.pocketmonsters.database.room;
+package com.example.pocketmonsters.database.room.user;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

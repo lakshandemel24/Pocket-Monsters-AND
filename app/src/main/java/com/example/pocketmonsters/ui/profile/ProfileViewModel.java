@@ -1,27 +1,18 @@
 package com.example.pocketmonsters.ui.profile;
 
-import static android.opengl.ETC1.encodeImage;
-import static com.google.common.io.ByteStreams.readBytes;
-
-import android.app.Dialog;
-import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.lifecycle.ViewModel;
 
-import com.example.pocketmonsters.R;
 import com.example.pocketmonsters.api.RetrofitProvider;
-import com.example.pocketmonsters.database.room.UserDBHelper;
 import com.example.pocketmonsters.models.User;
 import com.example.pocketmonsters.models.VirtualObj;
 import com.example.pocketmonsters.ui.SharedViewModel;
@@ -33,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import kotlinx.coroutines.flow.SharingStarted;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -65,21 +55,20 @@ public class ProfileViewModel extends ViewModel {
             public void onSuccess(List<VirtualObj> list) {
                 profileModel.setVirtualObj(list);
 
+                amuletProgress.setVisibility(ProgressBar.INVISIBLE);
+                armorProgress.setVisibility(ProgressBar.INVISIBLE);
+                weaponProgress.setVisibility(ProgressBar.INVISIBLE);
+
                 for (VirtualObj virtualObj : list) {
 
-                    amuletProgress.setVisibility(ProgressBar.INVISIBLE);
-
                      if (virtualObj.getType().equals("weapon")) {
-                         weaponProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
-                             weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
                              byte[] imageBytes = baos.toByteArray();
                              imageBytes = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
                              Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                              weapon.setImageBitmap(bitmap);
                          } else {
-                                weaponProgress.setVisibility(ProgressBar.INVISIBLE);
                                 weaponName.setText(virtualObj.getName());
                              weapon.setImageBitmap(null);
                          }
@@ -89,16 +78,13 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("armor")) {
-                         armorProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
-                             armorProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
                              byte[] imageBytes = baos.toByteArray();
                              imageBytes = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
                              Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                              armor.setImageBitmap(bitmap);
                          } else {
-                             armorProgress.setVisibility(ProgressBar.INVISIBLE);
                              armorName.setText(virtualObj.getName());
                              armor.setImageBitmap(null);
                          }
@@ -108,16 +94,13 @@ public class ProfileViewModel extends ViewModel {
                          });
 
                      } else if (virtualObj.getType().equals("amulet")) {
-                         amuletProgress.setVisibility(ProgressBar.VISIBLE);
                          if(virtualObj.getImage() != null) {
-                             amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                              ByteArrayOutputStream baos = new ByteArrayOutputStream();
                              byte[] imageBytes = baos.toByteArray();
                              imageBytes = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
                              Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                              amulet.setImageBitmap(bitmap);
                          } else {
-                             amuletProgress.setVisibility(ProgressBar.INVISIBLE);
                              amuletName.setText(virtualObj.getName());
                              amulet.setImageBitmap(null);
                          }

@@ -1,7 +1,7 @@
 package com.example.pocketmonsters.api;
 
 public class ObjectsResponse {
-    int id;
-    double lat;
-    double lon;
+    public int id;
+    public double lat;
+    public double lon;
 }

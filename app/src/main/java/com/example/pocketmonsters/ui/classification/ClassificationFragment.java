@@ -64,7 +64,7 @@ public class ClassificationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         sharedPreferences = getActivity().getPreferences(getContext().MODE_PRIVATE);
-        sid = sharedPreferences.getString("sid", "default");
+        sid = sharedPreferences.getString("sid", "ePzuGF55G6Z5ZRj6Vj7J");
         viewModel = new ViewModelProvider(this).get(ClassificationViewModel.class);
         progressBar = view.findViewById(R.id.progressBar);
         errorText = view.findViewById(R.id.Error);

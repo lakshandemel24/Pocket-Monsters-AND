@@ -13,8 +13,6 @@ import java.util.List;
 
 public class ClassificationViewModel extends ViewModel {
 
-    public List<Player> players;
-
     private final ClassificationModel classificationModel;
     public ClassificationViewModel() {
         super();

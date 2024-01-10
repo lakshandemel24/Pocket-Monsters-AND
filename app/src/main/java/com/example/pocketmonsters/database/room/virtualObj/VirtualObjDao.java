@@ -15,7 +15,7 @@ public interface VirtualObjDao {
     @Insert
     void insert(VirtualObj virtualObj);
     @Query("SELECT * FROM virtualObj")
-    List<User> loadAll();
+    List<VirtualObj> loadAll();
     @Query("SELECT * FROM virtualObj WHERE id = :id")
     VirtualObj loadById(int id);
 

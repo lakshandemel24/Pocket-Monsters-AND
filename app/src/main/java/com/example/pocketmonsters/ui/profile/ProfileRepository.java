@@ -36,7 +36,7 @@ public class ProfileRepository {
                     }
                     ObjectsResponseId result = response.body();
 
-                    virtualObjList.add(new VirtualObj(result.id, result.name, result.type, result.level, result.image));
+                    virtualObjList.add(new VirtualObj(result.id, result.name, result.type, result.level, result.image, 0, 0));
                     profileListener.onSuccess(virtualObjList);
 
                 }

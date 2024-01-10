@@ -17,16 +17,12 @@ import retrofit2.Callback;
 public class NearbyRepository {
 
     private String sid;
-    private double lat;
-    private double lon;
 
     RetrofitProvider retrofitProvider = new RetrofitProvider();
     VirtualObjDBHelper virtualObjDBHelper;
 
-    public NearbyRepository(String sid, double lat, double lon) {
+    public NearbyRepository(String sid) {
         this.sid = sid;
-        this.lat = lat;
-        this.lon = lon;
     }
 
     public void getVirtualObj(String sid, double lat, double lon, NearbyListener nearbyListener) {

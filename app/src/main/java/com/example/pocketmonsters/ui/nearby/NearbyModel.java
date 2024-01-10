@@ -19,7 +19,7 @@ public class NearbyModel {
         return virtualObjList.get(position);
     }
 
-    public void appendPlayers(List<VirtualObj> p) {
+    public void appendVirtualObjlist(List<VirtualObj> p) {
         virtualObjList.addAll(p);
     }
 

@@ -13,8 +13,8 @@ public class VirtualObj {
     String type;
     int level;
     String image;
-    double lat;
-    double lon;
+    public double lat;
+    public double lon;
 
     public VirtualObj(int id, String name, String type, int level, String image, double lat, double lon) {
         this.id = id;

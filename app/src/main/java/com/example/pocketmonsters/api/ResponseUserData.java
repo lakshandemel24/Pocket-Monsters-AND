@@ -2,11 +2,11 @@ package com.example.pocketmonsters.api;
 
 public class ResponseUserData {
 
-    boolean died;
-    int life;
-    int experience;
-    int weapon;
-    int armor;
-    int amulet;
+    public boolean died;
+    public int life;
+    public int experience;
+    public int weapon;
+    public int armor;
+    public int amulet;
 
 }

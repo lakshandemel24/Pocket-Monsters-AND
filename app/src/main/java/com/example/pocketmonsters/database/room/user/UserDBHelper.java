@@ -26,8 +26,8 @@ public class UserDBHelper {
         return appDatabase.userDao().loadAll().size();
     }
 
-    public void insertUser(User userList) {
-        appDatabase.userDao().insert(userList);
+    public void insertUser(User user) {
+        appDatabase.userDao().insert(user);
     }
 
     public void clearUsers() {

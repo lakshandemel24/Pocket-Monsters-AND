@@ -22,7 +22,7 @@ public class VirtualObjDBHelper {
         return appDatabase.virtualObjDao().loadAll().size();
     }
 
-    public void insertUser(VirtualObj virtualObj) {
+    public void insert(VirtualObj virtualObj) {
         appDatabase.virtualObjDao().insert(virtualObj);
     }
 

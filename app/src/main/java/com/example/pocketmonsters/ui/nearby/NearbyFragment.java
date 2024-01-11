@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.ui.SharedViewModel;
 
 public class NearbyFragment extends Fragment {
 
@@ -30,10 +32,12 @@ public class NearbyFragment extends Fragment {
     TextView errorText;
     NearbyAdapter adapter;
     NearbyViewModel viewModel;
+    SharedViewModel sharedViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -59,8 +63,8 @@ public class NearbyFragment extends Fragment {
         errorText = view.findViewById(R.id.Error);
 
         sharedPreferences = getActivity().getPreferences(getContext().MODE_PRIVATE);
-        sid = sharedPreferences.getString("sid", "default");
-
+        sid = sharedPreferences.getString("sid", "ePzuGF55G6Z5ZRj6Vj7J");
+        viewModel = new ViewModelProvider(this).get(NearbyViewModel.class);
         lat = getArguments().getDouble("lat");
         lon = getArguments().getDouble("lon");
 
@@ -69,7 +73,7 @@ public class NearbyFragment extends Fragment {
         adapter = new NearbyAdapter(getContext(), viewModel);
         recyclerView.setAdapter(adapter);
 
-        viewModel.loadNearbyVirtualObj(sid, lat, lon, adapter, progressBar, errorText);
+        viewModel.loadNearbyVirtualObj(sid, lat, lon, adapter, progressBar, errorText, sharedViewModel, getContext());
 
     }
 

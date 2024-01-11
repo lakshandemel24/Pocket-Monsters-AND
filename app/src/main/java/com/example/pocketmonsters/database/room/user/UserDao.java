@@ -15,7 +15,7 @@ public interface UserDao {
     void insert(User user);
     @Query("SELECT * FROM user")
     List<User> loadAll();
-    @Query("DELETE FROM user")
+    @Query("DELETE FROM user WHERE uid = (SELECT uid FROM user ORDER BY uid LIMIT 1)")
     void clear();
     //get the uid of the first user
     @Query("SELECT uid FROM user LIMIT 1")

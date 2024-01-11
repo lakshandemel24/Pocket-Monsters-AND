@@ -1,5 +1,6 @@
 package com.example.pocketmonsters.ui.nearby;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.pocketmonsters.api.ObjectsResponse;
@@ -25,10 +26,10 @@ public class NearbyRepository {
         this.sid = sid;
     }
 
-    public void getVirtualObj(String sid, double lat, double lon, NearbyListener nearbyListener) {
+    public void getVirtualObj(String sid, double lat, double lon, Context context, NearbyListener nearbyListener) {
 
         List<VirtualObj> virtualObjList = new ArrayList<>();
-        virtualObjDBHelper = new VirtualObjDBHelper(null);
+        virtualObjDBHelper = new VirtualObjDBHelper(context);
 
         Call<List<ObjectsResponse>> call = retrofitProvider.getApiInterface().getObjects(sid, lat, lon);
         call.enqueue(new Callback<List<ObjectsResponse>>() {
@@ -62,8 +63,8 @@ public class NearbyRepository {
                                     return;
                                 }
                                 ObjectsResponseId resultById = response.body();
-                                virtualObjDBHelper.insertUser(new VirtualObj(resultById.id, resultById.type, resultById.name, resultById.level, resultById.image, resultById.lat, resultById.lon));
-                                virtualObjList.add(new VirtualObj(resultById.id, resultById.type, resultById.name, resultById.level, resultById.image, resultById.lat, resultById.lon));
+                                virtualObjDBHelper.insert(new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon));
+                                virtualObjList.add(new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon));
                                 if(virtualObjList.size() == result.size()) {
                                     nearbyListener.onSuccess(virtualObjList);
                                 }

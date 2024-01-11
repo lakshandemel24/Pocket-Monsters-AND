@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.lifecycle.ViewModel;
 
 import com.example.pocketmonsters.api.RetrofitProvider;
+import com.example.pocketmonsters.database.room.user.UserDBHelper;
 import com.example.pocketmonsters.models.User;
 import com.example.pocketmonsters.models.VirtualObj;
 import com.example.pocketmonsters.ui.SharedViewModel;
@@ -50,14 +51,14 @@ public class ProfileViewModel extends ViewModel {
 
         ProfileRepository profileRepository = new ProfileRepository();
 
+        amuletProgress.setVisibility(ProgressBar.INVISIBLE);
+        armorProgress.setVisibility(ProgressBar.INVISIBLE);
+        weaponProgress.setVisibility(ProgressBar.INVISIBLE);
+
         profileRepository.getUserArtifacts(uidObj, sid, new ProfileListener() {
             @Override
             public void onSuccess(List<VirtualObj> list) {
                 profileModel.setVirtualObj(list);
-
-                amuletProgress.setVisibility(ProgressBar.INVISIBLE);
-                armorProgress.setVisibility(ProgressBar.INVISIBLE);
-                weaponProgress.setVisibility(ProgressBar.INVISIBLE);
 
                 for (VirtualObj virtualObj : list) {
 
@@ -123,7 +124,7 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    public void setPosSharing(boolean posSharing, String sid, int uid, Context context) {
+    public void setPosSharing(boolean posSharing, String sid, int uid) {
 
         Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(uid, sid, null, null, posSharing);
         editUserCall.enqueue(new Callback<JsonElement>() {
@@ -143,7 +144,7 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    public void changeUserName(String sid, int uid, String name, boolean posSharing) {
+    public void changeUserName(String sid, int uid, String name, SharedViewModel sharedViewModel, UserDBHelper userDBHelper) {
 
         Call<JsonElement> editUserCall = retrofitProvider.getApiInterface().editUSer(uid, sid, name, null, null);
         editUserCall.enqueue(new Callback<JsonElement>() {
@@ -154,7 +155,9 @@ public class ProfileViewModel extends ViewModel {
                     return;
                 }
                 Log.d("Lak-ProfileViewModel", "Name modified");
-
+                sharedViewModel.setUser(new User(sharedViewModel.getUser().getValue().getSid(), sharedViewModel.getUser().getValue().getUid(), name, sharedViewModel.getUser().getValue().getLat(), sharedViewModel.getUser().getValue().getLon(), sharedViewModel.getUser().getValue().getTime(), sharedViewModel.getUser().getValue().getLife(), sharedViewModel.getUser().getValue().getExperience(), sharedViewModel.getUser().getValue().getWeapon(), sharedViewModel.getUser().getValue().getArmor(), sharedViewModel.getUser().getValue().getAmulet(), sharedViewModel.getUser().getValue().getPicture(), sharedViewModel.getUser().getValue().getProfileversion(), sharedViewModel.getUser().getValue().isPositionshare()));
+                userDBHelper.clearUsers();
+                userDBHelper.insertUser(new User(sharedViewModel.getUser().getValue().getSid(), sharedViewModel.getUser().getValue().getUid(), name, sharedViewModel.getUser().getValue().getLat(), sharedViewModel.getUser().getValue().getLon(), sharedViewModel.getUser().getValue().getTime(), sharedViewModel.getUser().getValue().getLife(), sharedViewModel.getUser().getValue().getExperience(), sharedViewModel.getUser().getValue().getWeapon(), sharedViewModel.getUser().getValue().getArmor(), sharedViewModel.getUser().getValue().getAmulet(), sharedViewModel.getUser().getValue().getPicture(), sharedViewModel.getUser().getValue().getProfileversion(), sharedViewModel.getUser().getValue().isPositionshare()));
             }
             @Override
             public void onFailure(Call call, Throwable t) {
@@ -164,7 +167,7 @@ public class ProfileViewModel extends ViewModel {
 
     }
 
-    public void changeUserImage(Uri o, SharedViewModel sharedViewModel, Context context) {
+    public void changeUserImage(Uri o, SharedViewModel sharedViewModel, Context context, UserDBHelper userDBHelper) {
 
         String img = uriToBase64(context, o);
 
@@ -178,6 +181,8 @@ public class ProfileViewModel extends ViewModel {
                 }
                 Log.d("Lak-ProfileViewModel", "Profile picture modified");
                 sharedViewModel.setUser(new User(sharedViewModel.getUser().getValue().getSid(), sharedViewModel.getUser().getValue().getUid(), sharedViewModel.getUser().getValue().getName(), sharedViewModel.getUser().getValue().getLat(), sharedViewModel.getUser().getValue().getLon(), sharedViewModel.getUser().getValue().getTime(), sharedViewModel.getUser().getValue().getLife(), sharedViewModel.getUser().getValue().getExperience(), sharedViewModel.getUser().getValue().getWeapon(), sharedViewModel.getUser().getValue().getArmor(), sharedViewModel.getUser().getValue().getAmulet(), img, sharedViewModel.getUser().getValue().getProfileversion(), sharedViewModel.getUser().getValue().isPositionshare()));
+                userDBHelper.clearUsers();
+                userDBHelper.insertUser(new User(sharedViewModel.getUser().getValue().getSid(), sharedViewModel.getUser().getValue().getUid(), sharedViewModel.getUser().getValue().getName(), sharedViewModel.getUser().getValue().getLat(), sharedViewModel.getUser().getValue().getLon(), sharedViewModel.getUser().getValue().getTime(), sharedViewModel.getUser().getValue().getLife(), sharedViewModel.getUser().getValue().getExperience(), sharedViewModel.getUser().getValue().getWeapon(), sharedViewModel.getUser().getValue().getArmor(), sharedViewModel.getUser().getValue().getAmulet(), img, sharedViewModel.getUser().getValue().getProfileversion(), sharedViewModel.getUser().getValue().isPositionshare()));
             }
             @Override
             public void onFailure(Call call, Throwable t) {

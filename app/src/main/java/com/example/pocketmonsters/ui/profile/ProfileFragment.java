@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.database.room.user.UserDBHelper;
 import com.example.pocketmonsters.databinding.FragmentMainBinding;
 import com.example.pocketmonsters.databinding.FragmentProfileBinding;
 import com.example.pocketmonsters.models.User;
@@ -41,12 +42,14 @@ import com.example.pocketmonsters.ui.main.MainViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 public class ProfileFragment extends Fragment {
 
     private FragmentProfileBinding binding;
     SharedViewModel sharedViewModel;
     ProfileViewModel profileViewModel;
+    UserDBHelper userDBHelper;
 
     ActivityResultLauncher<PickVisualMediaRequest> launcher = registerForActivityResult(
             new ActivityResultContracts.PickVisualMedia(), new ActivityResultCallback<Uri>() {
@@ -55,8 +58,19 @@ public class ProfileFragment extends Fragment {
                     if(o == null) {
                         Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
                     } else{
+
+                        long size = FileUtils.getImageSizeInKB(getContext(), o);
+
+                        if(size > 99) {
+                            Toast.makeText(getContext(), "Image too big", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        Log.d("Lak-ProfileFragment", "Image size: " + size);
+
                         Glide.with(getContext()).load(o).into(binding.userImage);
-                        profileViewModel.changeUserImage(o, sharedViewModel, getContext());
+                        profileViewModel.changeUserImage(o, sharedViewModel, getContext(), userDBHelper);
+
                     }
                 }
             });
@@ -66,6 +80,7 @@ public class ProfileFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        userDBHelper = new UserDBHelper(getContext());
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,7 +101,7 @@ public class ProfileFragment extends Fragment {
 
         sharedViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
-                Log.d("Lak-ProfileFragment", "Position sharing: " + user.isPositionshare());
+                //Log.d("Lak-ProfileFragment", "Position sharing: " + user.isPositionshare());
                 binding.userName.setText(user.getName());
                 binding.userLife.setText(String.valueOf(user.getLife()));
                 binding.userLevel.setText("LIVELLO " + String.valueOf(user.getExperience()/100));
@@ -117,11 +132,15 @@ public class ProfileFragment extends Fragment {
 
                 binding.posSharingSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if(isChecked) {
-                        profileViewModel.setPosSharing(true, user.getSid(), user.getUid(), getContext());
+                        profileViewModel.setPosSharing(true, user.getSid(), user.getUid());
                         sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), true));
+                        userDBHelper.clearUsers();
+                        userDBHelper.insertUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), true));
                     } else {
-                        profileViewModel.setPosSharing(false, user.getSid(), user.getUid(), getContext());
+                        profileViewModel.setPosSharing(false, user.getSid(), user.getUid());
                         sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), false));
+                        userDBHelper.clearUsers();
+                        userDBHelper.insertUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), false));
                     }
                 });
 
@@ -146,7 +165,7 @@ public class ProfileFragment extends Fragment {
                                     Toast.makeText(getContext(), "Name cannot be empty", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
-                                profileViewModel.changeUserName(user.getSid(), user.getUid(), name, user.isPositionshare());
+                                profileViewModel.changeUserName(user.getSid(), user.getUid(), name, sharedViewModel, userDBHelper);
                                 sharedViewModel.setUser(new User(user.getSid(), user.getUid(), name, user.getLat(), user.getLon(), user.getTime(), user.getLife(), user.getExperience(), user.getWeapon(), user.getArmor(), user.getAmulet(), user.getPicture(), user.getProfileversion(), user.isPositionshare()));
                             })
                             .setView(R.layout.dialog_name)

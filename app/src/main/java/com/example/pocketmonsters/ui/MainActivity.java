@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
 
 //to remove!!!!!!!!!!
-                    sid = "ePzuGF55G6Z5ZRj6Vj7J";
-                    uid = 1007;
+                    //sid = "ePzuGF55G6Z5ZRj6Vj7J";
+                    //uid = 1007;
 
                     Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(uid, sid);
                     call2.enqueue(new retrofit2.Callback<ResponseUsersId>() {

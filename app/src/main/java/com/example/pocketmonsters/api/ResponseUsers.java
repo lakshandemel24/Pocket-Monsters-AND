@@ -2,12 +2,12 @@ package com.example.pocketmonsters.api;
 
 public class ResponseUsers {
 
-    int uid;
-    double lat;
-    double lon;
-    int profileversion;
-    int life;
-    int experience;
-    String time;
+    public int uid;
+    public double lat;
+    public double lon;
+    public int profileversion;
+    public int life;
+    public int experience;
+    public String time;
 
 }

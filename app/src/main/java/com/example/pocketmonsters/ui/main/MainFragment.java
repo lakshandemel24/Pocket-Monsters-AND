@@ -33,6 +33,8 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.database.room.user.UserDBHelper;
+import com.example.pocketmonsters.database.room.virtualObj.VirtualObjDBHelper;
 import com.example.pocketmonsters.databinding.FragmentMainBinding;
 import com.example.pocketmonsters.ui.SharedViewModel;
 import com.google.android.gms.location.CurrentLocationRequest;
@@ -70,6 +72,8 @@ public class MainFragment extends Fragment {
     SharedViewModel sharedViewModel;
     MainViewModel viewModel;
     NavController navController;
+    VirtualObjDBHelper virtualObjDBHelper;
+    UserDBHelper userDBHelper;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -105,7 +109,21 @@ public class MainFragment extends Fragment {
                 });
 
 
-                getCurrPos();
+                getCurrPos(new MainLocationListener() {
+                    @Override
+                    public void onSuccess(double lat, double lon) {
+
+                        viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext());
+
+                    }
+
+                    @Override
+                    public void onFailure() {
+
+                        Log.d(TAG, "onFailure: Position");
+
+                    }
+                });
 
                 addMarkers(mMap);
 
@@ -118,6 +136,8 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        virtualObjDBHelper = new VirtualObjDBHelper(getContext());
+        userDBHelper = new UserDBHelper(getContext());
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -254,14 +274,14 @@ public class MainFragment extends Fragment {
         }
     }
 
-    public void getCurrPos() {
+    public void getCurrPos(MainLocationListener mainLocationListener) {
 
         checkLocationSettings();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         LocationRequest locationRequest =
-                new LocationRequest.Builder(1000)
+                new LocationRequest.Builder(5000)
                         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                         .build();
 
@@ -287,6 +307,7 @@ public class MainFragment extends Fragment {
 
                 Log.d(TAG, "onLocationResult " + locationResult.getLastLocation().getLatitude());
                 Log.d(TAG, "onLocationResult " + locationResult.getLastLocation().getLongitude());
+                mainLocationListener.onSuccess(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
 
             }
 

@@ -2,7 +2,7 @@ package com.example.pocketmonsters.api;
 
 public class ResponseUsersId {
 
-        int uid;
+        public int uid;
         public String name;
         public double lat;
         public double lon;

@@ -9,6 +9,8 @@ public class Player {
     private int lifePoints;
     private int level;
     private String profilePicture;
+    private double lat;
+    private double lon;
 
     public Player(String name, int expPoits, int lifePoints, String profilePicture) {
         this.name = name;
@@ -36,6 +38,22 @@ public class Player {
 
     public String getProfilePicture() {
         return profilePicture;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
 }

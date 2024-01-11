@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -45,9 +46,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -94,6 +97,7 @@ public class MainFragment extends Fragment {
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setCompassEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
+                mMap.getUiSettings().setMapToolbarEnabled(false);
 
                 btnMyLocation = getView().findViewById(R.id.buttonLocation);
                 btnMyLocation.setOnClickListener( v -> {
@@ -102,6 +106,8 @@ public class MainFragment extends Fragment {
 
 
                 getCurrPos();
+
+                addMarkers(mMap);
 
             }
 
@@ -349,6 +355,39 @@ public class MainFragment extends Fragment {
                     getActivity().finishAffinity();
                 })
                 .show();
+
+    }
+
+    private void addMarkers(GoogleMap map) {
+
+        int height = 150;
+        int width = 150;
+        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.cup);
+        Bitmap b = bitmapdraw.getBitmap();
+        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(45.464211, 9.191383))
+                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                .draggable(true)
+        );
+
+        map.setOnMarkerClickListener(marker -> {
+
+            new MaterialAlertDialogBuilder(getContext())
+                    .setTitle("Cattura")
+                    .setMessage("Vuoi catturare questo pokemon?")
+                    .setPositiveButton("Si", (dialog, which) -> {
+                        dialog.dismiss();
+                        Toast.makeText(getContext(), "Pokemon catturato!", Toast.LENGTH_SHORT).show();
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+
+            return false;
+        });
 
     }
 

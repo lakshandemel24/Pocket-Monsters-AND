@@ -131,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
                             ResponseUsersId responseUsersId = response.body();
                             user = new User(sid, uid, responseUsersId.name, responseUsersId.lat, responseUsersId.lon, responseUsersId.time, responseUsersId.life, responseUsersId.experience, responseUsersId.weapon, responseUsersId.armor, responseUsersId.amulet, responseUsersId.picture, responseUsersId.profileversion, responseUsersId.positionshare);
                             registerUserName(user);
-
                         }
                         @Override
                         public void onFailure(Call<ResponseUsersId> call, Throwable t) {
@@ -194,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(name.isEmpty()) {
                         Toast.makeText(this, "Name cannot be empty", Toast.LENGTH_SHORT).show();
+                        finish();
                         return;
                     }
 

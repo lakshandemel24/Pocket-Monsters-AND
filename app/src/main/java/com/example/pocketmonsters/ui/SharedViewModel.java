@@ -9,7 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class SharedViewModel extends ViewModel {
 
-    private final MutableLiveData<LatLng> position = new MutableLiveData<LatLng>(null);
+
     private final MutableLiveData<User> user = new MutableLiveData<User>(null);
 
     public LiveData<User> getUser() {
@@ -20,6 +20,10 @@ public class SharedViewModel extends ViewModel {
         this.user.setValue(user);
     }
 
+    /*
+
+    private final MutableLiveData<LatLng> position = new MutableLiveData<LatLng>(null);
+
     public LiveData<LatLng> getPosition() {
         return position;
     }
@@ -27,5 +31,7 @@ public class SharedViewModel extends ViewModel {
     public void setPosition(LatLng position) {
         this.position.setValue(position);
     }
+
+     */
 
 }

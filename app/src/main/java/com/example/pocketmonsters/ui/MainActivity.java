@@ -130,18 +130,19 @@ public class MainActivity extends AppCompatActivity {
                             }
                             ResponseUsersId responseUsersId = response.body();
                             user = new User(sid, uid, responseUsersId.name, responseUsersId.lat, responseUsersId.lon, responseUsersId.time, responseUsersId.life, responseUsersId.experience, responseUsersId.weapon, responseUsersId.armor, responseUsersId.amulet, responseUsersId.picture, responseUsersId.profileversion, responseUsersId.positionshare);
+                            viewModel.setUser(user);
                             registerUserName(user);
                         }
                         @Override
                         public void onFailure(Call<ResponseUsersId> call, Throwable t) {
-                            Log.d("Lak-ProfileRepository", "onFailure: " + t.getMessage());
+                            Log.d(TAG, "onFailure: " + t.getMessage());
                         }
                     });
 
                 }
                 @Override
                 public void onFailure(Call<SignUpResponse> call, Throwable t) {
-                    Log.d("ProfileRepository", "onFailure: " + t.getMessage());
+                        Log.d(TAG, "onFailure: " + t.getMessage());
                 }
             });
 
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 @Override
                 public void onFailure(Call<ResponseUsersId> call, Throwable t) {
-                    Log.d("Lak-ProfileRepository", "onFailure: " + t.getMessage());
+                    Log.d(TAG, "onFailure: " + t.getMessage());
                 }
             });
 

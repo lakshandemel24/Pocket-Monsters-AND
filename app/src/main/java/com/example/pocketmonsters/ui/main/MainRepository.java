@@ -2,10 +2,14 @@ package com.example.pocketmonsters.ui.main;
 
 import android.util.Log;
 
+import com.example.pocketmonsters.api.ObjectsResponse;
+import com.example.pocketmonsters.api.ObjectsResponseId;
 import com.example.pocketmonsters.api.ResponseUsers;
 import com.example.pocketmonsters.api.ResponseUsersId;
 import com.example.pocketmonsters.api.RetrofitProvider;
+import com.example.pocketmonsters.database.room.virtualObj.VirtualObjDBHelper;
 import com.example.pocketmonsters.models.Player;
+import com.example.pocketmonsters.models.VirtualObj;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +77,70 @@ public class MainRepository {
                 mainPlayersListener.onFailure();
             }
         });
+
+    }
+
+    public void getNearbyVirtualObjs(String sid, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, MainVirtualObjsListener mainVirtualObjsListener) {
+
+        List<VirtualObj> virtualObjs = new ArrayList<>();
+
+        Call<List<ObjectsResponse>> call = retrofitProvider.getApiInterface().getObjects(sid, lat, lon);
+        call.enqueue(new Callback<List<ObjectsResponse>>() {
+            @Override
+            public void onResponse(Call<List<ObjectsResponse>> call, retrofit2.Response<List<ObjectsResponse>> response) {
+                if (!response.isSuccessful()) {
+                    Log.d("Lak-MainRepository", "Error: " + response.code());
+                    return;
+                }
+                List<ObjectsResponse> result = response.body();
+                for (ObjectsResponse obj : result) {
+
+                    if(virtualObjDBHelper.loadById(obj.id) == null) {
+
+                        Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
+                        call2.enqueue(new Callback<ObjectsResponseId>() {
+                            @Override
+                            public void onResponse(Call<ObjectsResponseId> call2, retrofit2.Response<ObjectsResponseId> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.d("Lak-MainRepository", "Error: " + response.code());
+                                    mainVirtualObjsListener.onFailure();
+                                    return;
+                                }
+                                ObjectsResponseId resultById = response.body();
+
+                                VirtualObj virtualObj = new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon);
+                                virtualObjDBHelper.insert(virtualObj);
+                                virtualObjs.add(virtualObj);
+
+                                if(virtualObjs.size() == result.size()) {
+                                    mainVirtualObjsListener.onSuccess(virtualObjs);
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<ObjectsResponseId> call, Throwable t) {
+                                Log.d("Lak-MainRepository", "Error: " + t.getMessage());
+                                mainVirtualObjsListener.onFailure();
+                            }
+                        });
+
+                    } else {
+                        VirtualObj virtualObj = virtualObjDBHelper.loadById(obj.id);
+                        virtualObjs.add(virtualObj);
+
+                        if(virtualObjs.size() == result.size()) {
+                            mainVirtualObjsListener.onSuccess(virtualObjs);
+                        }
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<ObjectsResponse>> call, Throwable t) {
+                Log.d("Lak-MainRepository", "Error: " + t.getMessage());
+                mainVirtualObjsListener.onFailure();
+            }
+        });
+
 
     }
 

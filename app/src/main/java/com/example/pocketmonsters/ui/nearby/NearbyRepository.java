@@ -43,8 +43,6 @@ public class NearbyRepository {
                 List<ObjectsResponse> result = response.body();
                 for (ObjectsResponse obj : result) {
 
-                    Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
-
                     if(virtualObjDBHelper.loadById(obj.id) != null) {
 
                         virtualObjList.add(virtualObjDBHelper.loadById(obj.id));
@@ -54,6 +52,7 @@ public class NearbyRepository {
 
                     } else {
 
+                        Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
                         call2.enqueue(new Callback<ObjectsResponseId>() {
                             @Override
                             public void onResponse(Call<ObjectsResponseId> call2, retrofit2.Response<ObjectsResponseId> response) {

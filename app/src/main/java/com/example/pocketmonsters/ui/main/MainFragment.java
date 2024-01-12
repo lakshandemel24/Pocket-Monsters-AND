@@ -65,7 +65,7 @@ public class MainFragment extends Fragment {
     private GoogleMap mMap;
     private boolean locationPermissionGranted = true;
     private FusedLocationProviderClient fusedLocationClient;
-    private static final float DEFAULT_ZOOM = 18f;
+    private static final float DEFAULT_ZOOM = 20f;
     private ImageButton btnMyLocation;
 
     private FragmentMainBinding binding;
@@ -97,7 +97,7 @@ public class MainFragment extends Fragment {
                     return;
                 }
                 mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_dark));
-                mMap.setMinZoomPreference(17f);
+                //mMap.setMinZoomPreference(15f);
                 mMap.setMyLocationEnabled(true);
                 mMap.getUiSettings().setCompassEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -125,7 +125,7 @@ public class MainFragment extends Fragment {
                     }
                 });
 
-                addMarkers(mMap);
+                //addMarkers(mMap);
 
             }
 
@@ -281,7 +281,7 @@ public class MainFragment extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         LocationRequest locationRequest =
-                new LocationRequest.Builder(5000)
+                new LocationRequest.Builder(10000)
                         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                         .build();
 

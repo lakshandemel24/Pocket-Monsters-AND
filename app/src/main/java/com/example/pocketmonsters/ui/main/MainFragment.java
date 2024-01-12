@@ -113,7 +113,9 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onSuccess(double lat, double lon) {
 
-                        viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext());
+                        if(sharedViewModel.getUser().getValue() != null) {
+                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext());
+                        }
 
                     }
 
@@ -292,7 +294,7 @@ public class MainFragment extends Fragment {
                 Log.d(TAG, "onLocationAvailability " + locationAvailability.isLocationAvailable());
                 if (!(locationAvailability.isLocationAvailable())) {
                     Log.d(TAG, "onLocationAvailability: location not available");
-                    showErrorText("Attiva posizione!");
+                    //showErrorText("Attiva posizione!");
                 } else {
                     Log.d(TAG, "onLocationAvailability: location available");
                 }
@@ -359,7 +361,6 @@ public class MainFragment extends Fragment {
 
                     } else {
                         Log.d(TAG, "Location: null");
-                        showErrorText("Attiva posizione!");
                     }
                 }
         );
@@ -371,6 +372,7 @@ public class MainFragment extends Fragment {
         new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Errore")
                 .setMessage("Attiva posizione!")
+                .setCancelable(false)
                 .setPositiveButton("Ok", (dialog, which) -> {
                     dialog.dismiss();
                     getActivity().finishAffinity();
@@ -379,37 +381,5 @@ public class MainFragment extends Fragment {
 
     }
 
-    private void addMarkers(GoogleMap map) {
-
-        int height = 150;
-        int width = 150;
-        BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.cup);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(45.464211, 9.191383))
-                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                .draggable(true)
-        );
-
-        map.setOnMarkerClickListener(marker -> {
-
-            new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("Cattura")
-                    .setMessage("Vuoi catturare questo pokemon?")
-                    .setPositiveButton("Si", (dialog, which) -> {
-                        dialog.dismiss();
-                        Toast.makeText(getContext(), "Pokemon catturato!", Toast.LENGTH_SHORT).show();
-                    })
-                    .setNegativeButton("No", (dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .show();
-
-            return false;
-        });
-
-    }
 
 }

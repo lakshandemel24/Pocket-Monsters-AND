@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.api.ResponseUserData;
+import com.example.pocketmonsters.api.RetrofitProvider;
 import com.example.pocketmonsters.database.room.user.UserDBHelper;
 import com.example.pocketmonsters.database.room.virtualObj.VirtualObjDBHelper;
 import com.example.pocketmonsters.models.Player;
@@ -33,9 +35,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class MainViewModel extends ViewModel {
 
     private final MainModel mainModel;
+    private RetrofitProvider retrofitProvider = new RetrofitProvider();
     public MainViewModel() {
         super();
         mainModel = new MainModel();
@@ -49,7 +55,7 @@ public class MainViewModel extends ViewModel {
 
         map.clear();
 
-        String sid = sharedViewModel.getUser().getValue().getSid();//NOT COMPLETE :(
+        String sid = sharedViewModel.getUser().getValue().getSid();
 
         MainRepository mainRepository = new MainRepository(sid);
 
@@ -82,8 +88,6 @@ public class MainViewModel extends ViewModel {
 
                 for (VirtualObj virtualObj : virtualObjList) {
 
-                    Log.d("Lakko", virtualObj.getType());
-
                     if(virtualObj.getType().equals("monster")) {
 
                         BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.monster);
@@ -110,7 +114,7 @@ public class MainViewModel extends ViewModel {
 
             @Override
             public void onFailure() {
-
+                Toast.makeText(context, "Error loading virtual objects, try again later...", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -121,7 +125,7 @@ public class MainViewModel extends ViewModel {
 
                 if(marker.getTag().getClass() == VirtualObj.class) {
 
-// TO DOOOOO        setBattleDialog();
+                    setBattleDialog(context, marker, userDBHelper, sharedViewModel, sid);
 
                     return false;
                 }
@@ -163,10 +167,130 @@ public class MainViewModel extends ViewModel {
 
     }
 
+    private void setBattleDialog(Context context, Marker marker, UserDBHelper userDBHelper, SharedViewModel sharedViewModel, String sid) {
+
+        VirtualObj virtualObj = (VirtualObj) marker.getTag();
+
+        Dialog builder = new Dialog(context);
+        builder.setContentView(R.layout.dialog_box);
+        builder.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        builder.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialog_bg);
+
+        TextView name = builder.findViewById(R.id.nameD);
+        TextView expPoints = builder.findViewById(R.id.expPointsD);
+        TextView lifePoints = builder.findViewById(R.id.lifePointsD);
+        ImageView profilePicture = builder.findViewById(R.id.imageView);
+        Button active = builder.findViewById(R.id.close);
+        active.setText("activate");
+
+        name.setText(virtualObj.getName());
+        expPoints.setText(virtualObj.getType());
+        lifePoints.setText("lv. " + virtualObj.getLevel());
+
+        if(virtualObj.getImage() != null) {
+
+            byte[] imageByteArray = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
+
+            Glide.with(context)
+                    .asBitmap()
+                    .load(imageByteArray)
+                    .into(profilePicture);
+
+        }
+
+        active.setOnClickListener(v1 -> {
+
+            builder.setCancelable(false);
+
+            if(sharedViewModel.getUser().getValue().getLife() <= virtualObj.getLevel() && virtualObj.getType().equals("monster")) {
+
+                new MaterialAlertDialogBuilder(context)
+                        .setTitle("DANGER")
+                        .setMessage("Your life is in danger, you may die in this fight. Are you sure you want to fight it?")
+                        .setPositiveButton("Fight", (dialog, which) -> {
+
+                            Call<ResponseUserData> call = retrofitProvider.getApiInterface().activateObject(virtualObj.getId(), sid);
+                            call.enqueue(new Callback<ResponseUserData>() {
+                                @Override
+                                public void onResponse(Call<ResponseUserData> call, retrofit2.Response<ResponseUserData> response) {
+                                    if (!response.isSuccessful()) {
+                                        Log.d("Lak-NearbyViewModel", "Error: " + response.code());
+                                        Toast.makeText(context, "Error activating", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    ResponseUserData result = response.body();
+
+                                    if(result.died == true) {
+
+                                        new MaterialAlertDialogBuilder(context)
+                                                .setTitle("GAME OVER")
+                                                .setMessage("You died in this fight, all the artifacts you had are lost...")
+                                                .show();
+
+                                    }
+
+                                    User user = userDBHelper.getUser();
+                                    sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), result.life, result.experience, result.weapon, result.armor, result.amulet, user.getPicture(), user.getProfileversion(), user.isPositionshare()));
+                                    userDBHelper.clearUsers();
+                                    userDBHelper.insertUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), result.life, result.experience, result.weapon, result.armor, result.amulet, user.getPicture(), user.getProfileversion(), user.isPositionshare()));
+                                    Toast.makeText(context, "Activated", Toast.LENGTH_SHORT).show();
+                                    builder.dismiss();
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseUserData> call, Throwable t) {
+                                    Log.d("Lak", "Error: " + t.getMessage());
+                                    Toast.makeText(context, "Error activating", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            builder.dismiss();
+                        })
+                        .show();
+
+
+            } else {
+
+                Call<ResponseUserData> call = retrofitProvider.getApiInterface().activateObject(virtualObj.getId(), sid);
+                call.enqueue(new Callback<ResponseUserData>() {
+                    @Override
+                    public void onResponse(Call<ResponseUserData> call, retrofit2.Response<ResponseUserData> response) {
+                        if (!response.isSuccessful()) {
+                            Log.d("Lak-NearbyViewModel", "Error: " + response.code());
+                            Toast.makeText(context, "Error activating", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        ResponseUserData result = response.body();
+
+                        User user = userDBHelper.getUser();
+                        sharedViewModel.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), result.life, result.experience, result.weapon, result.armor, result.amulet, user.getPicture(), user.getProfileversion(), user.isPositionshare()));
+                        userDBHelper.clearUsers();
+                        userDBHelper.insertUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), result.life, result.experience, result.weapon, result.armor, result.amulet, user.getPicture(), user.getProfileversion(), user.isPositionshare()));
+                        Toast.makeText(context, "Activated", Toast.LENGTH_SHORT).show();
+                        builder.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseUserData> call, Throwable t) {
+                        Log.d("Lak", "Error: " + t.getMessage());
+                        Toast.makeText(context, "Error activating", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+
+        });
+
+        builder.show();
+
+    }
+
     public void setMarkerPlayer(Player player, GoogleMap map, BitmapDrawable bitmapdraw) {
 
-        int height = 150;
-        int width = 150;
+        int height = 80;
+        int width = 80;
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 

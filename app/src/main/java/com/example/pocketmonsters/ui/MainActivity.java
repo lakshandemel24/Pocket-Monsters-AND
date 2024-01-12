@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
         if(isServicesOK()){
             Log.d(TAG, "onCreate: services are ok");
 
+            // Check sid
+            retrofitProvider = new RetrofitProvider();
+            userDBHelper = new UserDBHelper(this);
+            getUser();
+
             // Get the navigation host fragment from this Activity
             NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
 
@@ -60,12 +65,6 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = navHostFragment.getNavController();
 
             viewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-
-            // Check sid
-            retrofitProvider = new RetrofitProvider();
-            userDBHelper = new UserDBHelper(this);
-            getUser();
-
 
         }
 

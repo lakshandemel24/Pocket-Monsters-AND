@@ -91,6 +91,8 @@ public class NearbyViewModel extends ViewModel {
                 Log.d("Lak-NearbyViewModel", "Armor: " + result.armor);
                 Log.d("Lak-NearbyViewModel", "Amulet: " + result.amulet);
 
+                sharedViewModelN.getUser();
+
                 user = userDBHelper.getUser();
                 sharedViewModelN.setUser(new User(user.getSid(), user.getUid(), user.getName(), user.getLat(), user.getLon(), user.getTime(), result.life, result.experience, result.weapon, result.armor, result.amulet, user.getPicture(), user.getProfileversion(), user.isPositionshare()));
                 userDBHelper.clearUsers();

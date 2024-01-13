@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.putString("sid", sid);
                     editor.apply();
 
-//to remove!!!!!!!!!!
+//Personal credentials
                     //sid = "ePzuGF55G6Z5ZRj6Vj7J";
                     //uid = 1007;
 

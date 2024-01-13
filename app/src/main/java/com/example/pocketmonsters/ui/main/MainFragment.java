@@ -113,6 +113,8 @@ public class MainFragment extends Fragment {
                     @Override
                     public void onSuccess(double lat, double lon) {
 
+                        binding.loadingBar.setVisibility(View.GONE);
+
                         if(sharedViewModel.getUser().getValue() != null) {
                             viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext());
                         }

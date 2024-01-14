@@ -75,6 +75,7 @@ public class MainFragment extends Fragment {
     VirtualObjDBHelper virtualObjDBHelper;
     UserDBHelper userDBHelper;
 
+    View v;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @Override
@@ -116,7 +117,7 @@ public class MainFragment extends Fragment {
                         binding.loadingBar.setVisibility(View.GONE);
 
                         if(sharedViewModel.getUser().getValue() != null) {
-                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext());
+                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v);
                         }
 
                     }
@@ -129,7 +130,6 @@ public class MainFragment extends Fragment {
                     }
                 });
 
-                //addMarkers(mMap);
 
             }
 
@@ -155,6 +155,8 @@ public class MainFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         this.navController = Navigation.findNavController(view);
+
+        this.v = view;
 
         setNavBtn();
 
@@ -285,7 +287,7 @@ public class MainFragment extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         LocationRequest locationRequest =
-                new LocationRequest.Builder(10000)
+                new LocationRequest.Builder(8000)
                         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                         .build();
 

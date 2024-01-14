@@ -31,13 +31,28 @@
             app:exitAnim="@anim/nav_slide_out_left"
             app:popExitAnim="@anim/nav_slide_out_right"
             app:popEnterAnim="@anim/nav_slide_in_left"/>
+        <action
+            android:id="@+id/action_mainFragment_to_playerDetails"
+            app:destination="@id/playerDetails" />
     </fragment>
 
     <fragment
         android:id="@+id/classificationFragment"
         android:name="com.example.pocketmonsters.ui.classification.ClassificationFragment"
         android:label="fragment_classification"
-        tools:layout="@layout/fragment_classification" />
+        tools:layout="@layout/fragment_classification" >
+
+        <action
+            android:id="@+id/action_classificationFragment_to_playerDetails"
+            app:destination="@id/playerDetails"
+            app:enterAnim="@anim/nav_slide_in_right"
+            app:exitAnim="@anim/nav_slide_out_left"
+            app:popExitAnim="@anim/nav_slide_out_right"
+            app:popEnterAnim="@anim/nav_slide_in_left"/>
+        <action
+            android:id="@+id/action_classificationFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -50,6 +65,23 @@
         android:id="@+id/nearbyFragment"
         android:name="com.example.pocketmonsters.ui.nearby.NearbyFragment"
         android:label="fragment_monsters"
-        tools:layout="@layout/fragment_nearby" />
+        tools:layout="@layout/fragment_nearby" >
+        <action
+            android:id="@+id/action_nearbyFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playerDetails"
+        android:name="com.example.pocketmonsters.ui.PlayerDetails"
+        android:label="fragment_player_details"
+        tools:layout="@layout/fragment_player_details" >
+        <action
+            android:id="@+id/action_playerDetails_to_classificationFragment"
+            app:destination="@id/classificationFragment" />
+        <action
+            android:id="@+id/action_playerDetails_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 
 </navigation>

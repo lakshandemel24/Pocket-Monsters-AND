@@ -33,6 +33,7 @@ public class NearbyFragment extends Fragment {
     NearbyAdapter adapter;
     NearbyViewModel viewModel;
     SharedViewModel sharedViewModel;
+    TextView radius;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class NearbyFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
         errorText = view.findViewById(R.id.Error);
+        radius = view.findViewById(R.id.radius);
 
         sharedPreferences = getActivity().getPreferences(getContext().MODE_PRIVATE);
         sid = sharedPreferences.getString("sid", "ePzuGF55G6Z5ZRj6Vj7J");
@@ -73,7 +75,7 @@ public class NearbyFragment extends Fragment {
         adapter = new NearbyAdapter(getContext(), viewModel);
         recyclerView.setAdapter(adapter);
 
-        viewModel.loadNearbyVirtualObj(sid, lat, lon, adapter, progressBar, errorText, sharedViewModel, getContext());
+        viewModel.loadNearbyVirtualObj(sid, lat, lon, adapter, progressBar, errorText, sharedViewModel, radius, getContext());
 
     }
 

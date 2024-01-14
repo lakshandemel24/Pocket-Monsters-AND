@@ -21,6 +21,8 @@ public class MainRepository {
 
     private String sid;
     RetrofitProvider retrofitProvider = new RetrofitProvider();
+    private static final double EARTH_RADIUS = 6371;
+    int count;
 
     public MainRepository(String sid) {
         this.sid = sid;
@@ -40,34 +42,47 @@ public class MainRepository {
                     return;
                 }
                 List<ResponseUsers> resultList = response.body();
+
+                count = 0;
                 for (ResponseUsers obj : resultList) {
 
-                    Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(obj.uid, sid);
-                    call2.enqueue(new Callback<ResponseUsersId>() {
-                        @Override
-                        public void onResponse(Call<ResponseUsersId> call2, retrofit2.Response<ResponseUsersId> response) {
-                            if (!response.isSuccessful()) {
-                                Log.d("Lak", "Error: " + response.code());
-                                return;
+                    double distance = calculateDistance(lat, lon, obj.lat, obj.lon);
+                    count++;
+
+                    if(resultList.size() == count) {
+                        mainPlayersListener.onSuccess(players);
+                    }
+
+                    if(distance < 100) {
+
+                        Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(obj.uid, sid);
+                        call2.enqueue(new Callback<ResponseUsersId>() {
+                            @Override
+                            public void onResponse(Call<ResponseUsersId> call2, retrofit2.Response<ResponseUsersId> response) {
+                                if (!response.isSuccessful()) {
+                                    Log.d("Lak", "Error: " + response.code());
+                                    return;
+                                }
+                                ResponseUsersId result = response.body();
+
+                                Player player = new Player(result.name, result.experience, result.life, result.picture);
+                                player.setPositionSharing(result.positionshare);
+                                player.setLat(result.lat);
+                                player.setLon(result.lon);
+                                players.add(player);
+                                if(resultList.size() == count) {
+                                    mainPlayersListener.onSuccess(players);
+                                }
+
                             }
-                            ResponseUsersId result = response.body();
-
-                            Player player = new Player(result.name, result.experience, result.life, result.picture);
-                            player.setLat(result.lat);
-                            player.setLon(result.lon);
-                            players.add(player);
-
-                            if(resultList.size() == players.size()) {
-                                mainPlayersListener.onSuccess(players);
+                            @Override
+                            public void onFailure(Call<ResponseUsersId> call2, Throwable t) {
+                                Log.d("Lak", "Error: " + t.getMessage());
+                                mainPlayersListener.onFailure();
                             }
+                        });
 
-                        }
-                        @Override
-                        public void onFailure(Call<ResponseUsersId> call2, Throwable t) {
-                            Log.d("Lak", "Error: " + t.getMessage());
-                            mainPlayersListener.onFailure();
-                        }
-                    });
+                    }
 
                 }
             }
@@ -80,7 +95,7 @@ public class MainRepository {
 
     }
 
-    public void getNearbyVirtualObjs(String sid, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, MainVirtualObjsListener mainVirtualObjsListener) {
+    public void getNearbyVirtualObjs(String sid, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, double maxDistance, MainVirtualObjsListener mainVirtualObjsListener) {
 
         List<VirtualObj> virtualObjs = new ArrayList<>();
 
@@ -93,7 +108,22 @@ public class MainRepository {
                     return;
                 }
                 List<ObjectsResponse> result = response.body();
+                count = 1;
+
                 for (ObjectsResponse obj : result) {
+
+                    if(result.size() == count) {
+                        mainVirtualObjsListener.onSuccess(virtualObjs);
+                    }
+
+                    double distance = calculateDistance(lat, lon, obj.lat, obj.lon);
+                    count++;
+
+                    if(distance > maxDistance) {
+                        continue;
+                    }
+
+                    Log.d("Lak-MainRepository", "Distance: " + distance + "m");
 
                     if(virtualObjDBHelper.loadById(obj.id) == null) {
 
@@ -112,7 +142,7 @@ public class MainRepository {
                                 virtualObjDBHelper.insert(virtualObj);
                                 virtualObjs.add(virtualObj);
 
-                                if(virtualObjs.size() == result.size()) {
+                                if(result.size() == count) {
                                     mainVirtualObjsListener.onSuccess(virtualObjs);
                                 }
                             }
@@ -127,7 +157,7 @@ public class MainRepository {
                         VirtualObj virtualObj = virtualObjDBHelper.loadById(obj.id);
                         virtualObjs.add(virtualObj);
 
-                        if(virtualObjs.size() == result.size()) {
+                        if(result.size() == count) {
                             mainVirtualObjsListener.onSuccess(virtualObjs);
                         }
                     }
@@ -142,6 +172,29 @@ public class MainRepository {
         });
 
 
+    }
+
+    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        // Convert latitude and longitude from degrees to radians
+        double lat1Rad = Math.toRadians(lat1);
+        double lon1Rad = Math.toRadians(lon1);
+        double lat2Rad = Math.toRadians(lat2);
+        double lon2Rad = Math.toRadians(lon2);
+
+        // Calculate differences
+        double deltaLat = lat2Rad - lat1Rad;
+        double deltaLon = lon2Rad - lon1Rad;
+
+        // Haversine formula
+        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                        Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        // Calculate the distance
+        double distance = EARTH_RADIUS * c * 1000;
+
+        return distance;
     }
 
 }

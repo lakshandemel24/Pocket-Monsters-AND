@@ -1,6 +1,7 @@
 package com.example.pocketmonsters.ui.classification;
 
 import android.app.Dialog;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +30,10 @@ public class ClassificationViewHolder extends RecyclerView.ViewHolder {
     private ProgressBar playerProgressBar;
     private ImageView playerImageView;
     private CardView singleRowCardView;
+    private boolean isPositionSharing;
+    private double lat;
+    private double lon;
+    private String picture;
 
     public ClassificationViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -39,28 +46,25 @@ public class ClassificationViewHolder extends RecyclerView.ViewHolder {
         singleRowCardView = itemView.findViewById(R.id.singleRowCard);
         playerImageView = itemView.findViewById(R.id.profilePicture);
 
+
         itemView.setOnClickListener(v -> {
 
-            Dialog builder = new Dialog(itemView.getContext());
-            builder.setContentView(R.layout.dialog_box);
-            builder.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            builder.getWindow().setBackgroundDrawableResource(R.drawable.custom_dialog_bg);
+            Bundle bundle = new Bundle();
 
-            TextView name = builder.findViewById(R.id.nameD);
-            TextView expPoints = builder.findViewById(R.id.expPointsD);
-            TextView lifePoints = builder.findViewById(R.id.lifePointsD);
-            ImageView profilePicture = builder.findViewById(R.id.imageView);
-            Button close = builder.findViewById(R.id.close);
-
-            name.setText(playerNameTextView.getText());
-            expPoints.setText("Exp: " + playerExpPointsTextView.getText());
-            lifePoints.setText("Life: " + playerLifePointsTextView.getText());
-            if(playerImageView.getDrawable() != null) {
-                profilePicture.setImageDrawable(playerImageView.getDrawable());
+            bundle.putString("origin", "classification");
+            bundle.putString("name", playerNameTextView.getText().toString());
+            bundle.putString("expPoints", playerExpPointsTextView.getText().toString());
+            bundle.putString("lifePoints", playerLifePointsTextView.getText().toString());
+            bundle.putString("level", playerLevelTextView.getText().toString());
+            bundle.putString("profilePicture", picture);
+            bundle.putBoolean("isPositionSharing", isPositionSharing);
+            if(isPositionSharing) {
+                bundle.putDouble("lat", lat);
+                bundle.putDouble("lon", lon);
             }
-            close.setOnClickListener(v1 -> builder.dismiss());
 
-            builder.show();
+            NavController navController = Navigation.findNavController(itemView);
+            navController.navigate(R.id.action_classificationFragment_to_playerDetails, bundle);
 
         });
 
@@ -76,7 +80,17 @@ public class ClassificationViewHolder extends RecyclerView.ViewHolder {
         playerPositionTextView.setText(String.format("%01d", getAdapterPosition()+1));
         playerProgressBar.setProgress(player.getExpPoits()%100);
 
+        if(player.isPositionSharing()) {
+            isPositionSharing = true;
+            lat = player.getLat();
+            lon = player.getLon();
+        } else {
+            isPositionSharing = false;
+        }
+
         if(player.getProfilePicture() != null) {
+
+            picture = player.getProfilePicture();
 
             byte[] imageByteArray = Base64.decode(player.getProfilePicture(), Base64.DEFAULT);
 

@@ -49,7 +49,15 @@ public class ClassificationRepository {
                                 return;
                             }
                             ResponseUsersId resultUs = response.body();
-                            players.add(new Player(resultUs.name, resultUs.experience, resultUs.life, resultUs.picture));
+                            Player player = new Player(resultUs.name, resultUs.experience, resultUs.life, resultUs.picture);
+                            player.setPositionSharing(resultUs.positionshare);
+
+                            if(player.isPositionSharing()) {
+                                player.setLat(resultUs.lat);
+                                player.setLon(resultUs.lon);
+                            }
+
+                            players.add(player);
                             if(players.size() == 20) {
                                 classificationListener.onSuccess(players);
                             }

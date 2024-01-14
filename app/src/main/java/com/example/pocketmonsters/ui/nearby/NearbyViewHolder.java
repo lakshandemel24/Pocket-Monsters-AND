@@ -1,6 +1,7 @@
 package com.example.pocketmonsters.ui.nearby;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,17 +26,18 @@ import com.example.pocketmonsters.models.VirtualObj;
 public class NearbyViewHolder extends RecyclerView.ViewHolder{
 
     private TextView name;
-    private TextView level;
+    private TextView levelView;
+    private int level;
     private ImageView image;
-
     int id;
     String type;
+    int levelObj;
 
     public NearbyViewHolder(@NonNull View itemView, NearbyViewModel viewModel) {
         super(itemView);
 
         name = itemView.findViewById(R.id.name);
-        level = itemView.findViewById(R.id.level);
+        levelView = itemView.findViewById(R.id.level);
         image = itemView.findViewById(R.id.image);
 
         itemView.setOnClickListener(v -> {
@@ -47,29 +51,34 @@ public class NearbyViewHolder extends RecyclerView.ViewHolder{
             TextView expPoints = builder.findViewById(R.id.expPointsD);
             TextView lifePoints = builder.findViewById(R.id.lifePointsD);
             ImageView profilePicture = builder.findViewById(R.id.imageView);
+            TextView damage = builder.findViewById(R.id.damage);
             Button active = builder.findViewById(R.id.close);
             active.setText("activate");
 
             name.setText(name.getText());
             expPoints.setText(type);
-            lifePoints.setText("" + level.getText());
+            lifePoints.setText("" + levelView.getText());
 
             if(image.getDrawable() != null) {
                 profilePicture.setImageDrawable(image.getDrawable());
             }
 
+            if(type.equals("monster")) {
+                active.setText("fight");
+                viewModel.showDamage(damage, level);
+            }
+
             active.setOnClickListener(v1 -> {
-                viewModel.activateVirtualObj(id, new NearbyActiteListener() {
+                builder.dismiss();
+                viewModel.activateVirtualObj(id, levelObj, type, itemView, new NearbyActiteListener() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(itemView.getContext(), "Activated", Toast.LENGTH_SHORT).show();
-                        builder.dismiss();
                     }
 
                     @Override
                     public void onFailure() {
                         Toast.makeText(itemView.getContext(), "Error activating", Toast.LENGTH_SHORT).show();
-                        builder.dismiss();
                     }
                 });
 
@@ -84,9 +93,11 @@ public class NearbyViewHolder extends RecyclerView.ViewHolder{
     public void bind(VirtualObj virtualObj) {
 
         name.setText(virtualObj.getName());
-        level.setText("Lv: " + virtualObj.getLevel());
+        levelView.setText("Lv: " + virtualObj.getLevel());
         type = virtualObj.getType();
         id = virtualObj.getId();
+        levelObj = virtualObj.getLevel();
+        level = virtualObj.getLevel();
 
         if(virtualObj.getImage() != null) {
             byte[] imageByteArray = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);

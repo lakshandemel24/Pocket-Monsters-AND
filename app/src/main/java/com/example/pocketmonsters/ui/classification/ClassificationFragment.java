@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -50,10 +52,11 @@ public class ClassificationFragment extends Fragment {
                              Bundle savedInstanceState) {
         View classificationView = inflater.inflate(R.layout.fragment_classification, container, false);
 
-        ImageButton back = classificationView.findViewById(R.id.buttonBack);
+        NavController nav = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
 
+        ImageButton back = classificationView.findViewById(R.id.buttonBack);
         back.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().popBackStack();
+            nav.navigate(R.id.action_classificationFragment_to_mainFragment);
         });
 
         return classificationView;

@@ -11,6 +11,7 @@ public class Player {
     private String profilePicture;
     private double lat;
     private double lon;
+    private boolean positionSharing;
 
     public Player(String name, int expPoits, int lifePoints, String profilePicture) {
         this.name = name;
@@ -54,6 +55,14 @@ public class Player {
 
     public void setLat(double lat) {
         this.lat = lat;
+    }
+
+    public boolean isPositionSharing() {
+        return positionSharing;
+    }
+
+    public void setPositionSharing(boolean positionSharing) {
+        this.positionSharing = positionSharing;
     }
 
 }

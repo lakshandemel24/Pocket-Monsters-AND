@@ -140,7 +140,7 @@ public class NearbyViewModel extends ViewModel {
 
         if(sharedViewModelN.getUser().getValue().getLife() <= level && type.equals("monster")){
 
-            navController.navigate(R.id.action_nearbyFragment_to_mainFragment);
+            //navController.navigate(R.id.action_nearbyFragment_to_mainFragment);
 
             new MaterialAlertDialogBuilder(itemView.getContext())
                     .setTitle("DANGER")
@@ -160,6 +160,8 @@ public class NearbyViewModel extends ViewModel {
                                 ResponseUserData result = response.body();
 
                                 if(result.died == true) {
+
+                                    navController.navigate(R.id.action_nearbyFragment_to_mainFragment);
 
                                     new MaterialAlertDialogBuilder(itemView.getContext())
                                             .setTitle("GAME OVER")
@@ -195,7 +197,7 @@ public class NearbyViewModel extends ViewModel {
 
         } else {
 
-            navController.navigate(R.id.action_nearbyFragment_to_mainFragment);
+            navController.popBackStack();
 
             Call<ResponseUserData> call = retrofitProvider.getApiInterface().activateObject(id, sidN);
             call.enqueue(new Callback<ResponseUserData>() {

@@ -1,6 +1,7 @@
 package com.example.pocketmonsters.ui.main;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.pocketmonsters.api.ObjectsResponse;
 import com.example.pocketmonsters.api.ObjectsResponseId;
@@ -50,36 +51,24 @@ public class MainRepository {
                     count++;
 
 
-                    if(distance < 80) {
+                    if(distance < 100) {
 
-                        Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(obj.uid, sid);
-                        call2.enqueue(new Callback<ResponseUsersId>() {
-                            @Override
-                            public void onResponse(Call<ResponseUsersId> call2, retrofit2.Response<ResponseUsersId> response) {
-                                if (!response.isSuccessful()) {
-                                    Log.d("Lak", "Error: " + response.code());
-                                    return;
-                                }
-                                ResponseUsersId result = response.body();
+                        Player player = new Player(null, obj.experience, obj.life, null);
+                        player.setUid(obj.uid);
 
-                                Log.d("Lakaka", "+1");
+                        try {
+                            player.setPositionSharing(true);
+                            player.setLat(obj.lat);
+                            player.setLon(obj.lon);
+                        } catch (Exception e) {
+                            player.setPositionSharing(false);
+                            e.printStackTrace();
+                        }
 
-                                Player player = new Player(result.name, result.experience, result.life, result.picture);
-                                player.setPositionSharing(result.positionshare);
-                                player.setLat(result.lat);
-                                player.setLon(result.lon);
-                                players.add(player);
-                                if(resultList.size() == count) {
-                                    mainPlayersListener.onSuccess(players);
-                                }
-
-                            }
-                            @Override
-                            public void onFailure(Call<ResponseUsersId> call2, Throwable t) {
-                                Log.d("Lak", "Error: " + t.getMessage());
-                                mainPlayersListener.onFailure();
-                            }
-                        });
+                        players.add(player);
+                        if(resultList.size() == count) {
+                            mainPlayersListener.onSuccess(players);
+                        }
 
                     } else {
                         if(resultList.size() == count) {
@@ -126,8 +115,6 @@ public class MainRepository {
                         continue;
                     }
 
-                    Log.d("Lak-MainRepository", "Distance: " + distance + "m");
-
                     if(virtualObjDBHelper.loadById(obj.id) == null) {
 
                         Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
@@ -142,7 +129,14 @@ public class MainRepository {
                                 ObjectsResponseId resultById = response.body();
 
                                 VirtualObj virtualObj = new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon);
-                                virtualObjDBHelper.insert(virtualObj);
+
+                                try {
+                                    virtualObjDBHelper.insert(virtualObj);
+                                } catch (Exception e) {
+                                    Log.d("errore", "id " + resultById.id);
+                                    e.printStackTrace();
+                                }
+
                                 virtualObjs.add(virtualObj);
 
                                 if(result.size() == count) {

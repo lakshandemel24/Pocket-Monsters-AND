@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
+import com.example.pocketmonsters.api.ResponseUsersId;
+import com.example.pocketmonsters.api.RetrofitProvider;
 import com.example.pocketmonsters.databinding.FragmentPlayerDetailsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,11 +30,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+
 public class PlayerDetails extends Fragment {
 
     String TAG = "Lak-PlayerDetails";
     private FragmentPlayerDetailsBinding binding;
     private GoogleMap mMap;
+    RetrofitProvider retrofitProvider = new RetrofitProvider();
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
@@ -128,10 +134,12 @@ public class PlayerDetails extends Fragment {
 
         }
 
-        Log.d(TAG, "setView: " + getArguments().getBoolean("isPositionSharing"));
-        Log.d(TAG, "setView: " + getArguments().getDouble("lat"));
-        Log.d(TAG, "setView: " + getArguments().getDouble("lon"));
-        Log.d(TAG, "setView: " + getArguments().getString("profilePicture"));
+        int id = getArguments().getInt("uid");
+        String sid = getArguments().getString("sid");
+
+        Log.d(TAG, "setView: " + id+ " " + sid);
+
+        checkMain(sid, id);
 
     }
     private void initMap() {
@@ -156,6 +164,55 @@ public class PlayerDetails extends Fragment {
                 .build();    // Creates a CameraPosition from the builder
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(
                 cameraPosition));
+
+    }
+
+    public void checkMain(String sid, int id) {
+
+        //Log.d(TAG, "checkMain: " + getArguments().getString("name") + " " + getArguments().getString("profilePicture"));
+
+        if(getArguments().getString("name") == null && getArguments().getString("profilePicture") == null) {
+
+            Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(id, sid);
+            call2.enqueue(new Callback<ResponseUsersId>() {
+                @Override
+                public void onResponse(Call<ResponseUsersId> call2, retrofit2.Response<ResponseUsersId> response) {
+                    if (!response.isSuccessful()) {
+                        Log.d("Lak", "Error: " + response.code());
+                        return;
+                    }
+                    ResponseUsersId result = response.body();
+
+                    binding.userName.setText(result.name);
+                    binding.userExp.setText(result.experience % 100 + "/100");
+                    binding.userLevel.setText("LIVELLO " + result.experience / 100);
+                    //
+                    binding.progressExpBar.setProgress(result.experience % 100);
+
+
+                    if(result.picture != null) {
+
+                        try {
+                            byte[] imageByteArray = Base64.decode(result.picture, Base64.DEFAULT);
+
+                            Glide.with(getContext())
+                                    .asBitmap()
+                                    .load(imageByteArray)
+                                    .into(binding.userImage);
+                        } catch (Exception e) {
+                            Toast.makeText(getContext(), "Errore nel caricamento dell'immagine", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                }
+                @Override
+                public void onFailure(Call<ResponseUsersId> call2, Throwable t) {
+                    Log.d("Lak", "Error: " + t.getMessage());
+                }
+            });
+
+        }
 
     }
 

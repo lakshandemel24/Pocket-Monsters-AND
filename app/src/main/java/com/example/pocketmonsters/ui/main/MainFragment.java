@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +76,8 @@ public class MainFragment extends Fragment {
     NavController navController;
     VirtualObjDBHelper virtualObjDBHelper;
     UserDBHelper userDBHelper;
-
+    Switch switcherPlayerVisibility;
+    boolean playerVisibility = true;
     View v;
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -109,6 +112,19 @@ public class MainFragment extends Fragment {
                     checkLocationSettings();
                 });
 
+                switcherPlayerVisibility = getView().findViewById(R.id.switchPlayer);
+
+                switcherPlayerVisibility.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    playerVisibility = isChecked;
+
+                    if(!isChecked) {
+                        mMap.clear();
+                        Toast.makeText(getContext(), "Players visibility deactivated", Toast.LENGTH_SHORT).show();
+                    }
+
+                    viewModel.addMarkers(mMap, mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude(), virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility);
+                });
+
 
                 getCurrPos(new MainLocationListener() {
                     @Override
@@ -117,19 +133,17 @@ public class MainFragment extends Fragment {
                         binding.loadingBar.setVisibility(View.GONE);
 
                         if(sharedViewModel.getUser().getValue() != null) {
-                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v);
+                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility);
                         }
 
                     }
 
                     @Override
                     public void onFailure() {
-
                         Log.d(TAG, "onFailure: Position");
 
                     }
                 });
-
 
             }
 

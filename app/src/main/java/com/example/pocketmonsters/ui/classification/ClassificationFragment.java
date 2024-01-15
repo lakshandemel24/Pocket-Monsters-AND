@@ -56,7 +56,7 @@ public class ClassificationFragment extends Fragment {
 
         ImageButton back = classificationView.findViewById(R.id.buttonBack);
         back.setOnClickListener(v -> {
-            nav.navigate(R.id.action_classificationFragment_to_mainFragment);
+            nav.popBackStack();
         });
 
         return classificationView;

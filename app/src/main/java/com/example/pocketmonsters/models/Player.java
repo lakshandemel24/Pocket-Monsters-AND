@@ -12,7 +12,7 @@ public class Player {
     private double lat;
     private double lon;
     private boolean positionSharing;
-
+    private int uid;
     public Player(String name, int expPoits, int lifePoints, String profilePicture) {
         this.name = name;
         this.expPoits = expPoits;
@@ -63,6 +63,13 @@ public class Player {
 
     public void setPositionSharing(boolean positionSharing) {
         this.positionSharing = positionSharing;
+    }
+    public int getUid() {
+        return this.uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
 }

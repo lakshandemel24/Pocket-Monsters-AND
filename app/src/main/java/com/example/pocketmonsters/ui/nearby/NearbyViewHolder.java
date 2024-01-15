@@ -12,15 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.pocketmonsters.R;
-import com.example.pocketmonsters.databinding.FragmentNearbyBinding;
-import com.example.pocketmonsters.databinding.SingleRowBinding;
-import com.example.pocketmonsters.databinding.SingleRowNearbyBinding;
 import com.example.pocketmonsters.models.VirtualObj;
 
 public class NearbyViewHolder extends RecyclerView.ViewHolder{

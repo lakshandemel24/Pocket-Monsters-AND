@@ -179,30 +179,27 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="invisible">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/player"
-                app:layout_constraintBottom_toTopOf="@+id/switch2"
-                app:layout_constraintEnd_toEndOf="@+id/switch2"
-                app:layout_constraintStart_toStartOf="@+id/switch2" />
+                app:layout_constraintBottom_toTopOf="@+id/switchPlayer"
+                app:layout_constraintEnd_toEndOf="@+id/switchPlayer"
+                app:layout_constraintStart_toStartOf="@+id/switchPlayer" />
 
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch2"
+            <Switch
+                android:id="@+id/switchPlayer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="1dp"
-                app:trackTint="#4CAF50"
-                app:thumbTint="#673AB7"
-                android:drawableTint="@color/black"/>
+                android:layout_marginBottom="5dp"
+                app:thumbTint="#673AB7"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

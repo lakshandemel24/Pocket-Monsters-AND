@@ -63,7 +63,7 @@ public class MainViewModel extends ViewModel {
         return mainModel.getUser();
     }
 
-    public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v) {
+    public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v, boolean playerVisibility) {
 
         //map.clear();
 
@@ -72,26 +72,37 @@ public class MainViewModel extends ViewModel {
 
         MainRepository mainRepository = new MainRepository(sid);
 
-        mainRepository.getNearbyPlayers(sid, lat, lon, new MainPlayersListener() {
-//TO UPGRADEEEEEE
-            @Override
-            public void onSuccess(List<Player> userList) {
+        if(playerVisibility) {
+            mainRepository.getNearbyPlayers(sid, lat, lon, new MainPlayersListener() {
+                //TO UPGRADEEEEEE
+                @Override
+                public void onSuccess(List<Player> userList) {
 
-                for (Player player : userList) {
+                    for (Player player : userList) {
 
-                    BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.player);
+                        try {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.player);
+                            setMarkerPlayer(player, map, bitmapdraw);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                    setMarkerPlayer(player, map, bitmapdraw);
+                    }
 
                 }
 
-            }
+                @Override
+                public void onFailure() {
+                    Toast.makeText(context, "Error loading players, try again later...", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-            @Override
-            public void onFailure() {
-                Toast.makeText(context, "Error loading players, try again later...", Toast.LENGTH_SHORT).show();
-            }
-        });
+        } else {
+
+            markerList.clear();
+
+        }
+
 
         int idUserAmulet = sharedViewModelM.getUser().getValue().getAmulet();
 
@@ -164,21 +175,30 @@ public class MainViewModel extends ViewModel {
 
                         if(virtualObj.getType().equals("monster")) {
 
-                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.monster);
-
-                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            try {
+                                BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.monster);
+                                setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         } else if (virtualObj.getType().equals("candy")) {
 
-                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.candy);
-
-                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            try {
+                                BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.candy);
+                                setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         } else {
 
-                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.artifact);
-
-                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            try {
+                                BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.artifact);
+                                setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
 
                         }
 
@@ -203,21 +223,31 @@ public class MainViewModel extends ViewModel {
 
                     if(virtualObj.getType().equals("monster")) {
 
-                        BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.monster);
+                        try {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.monster);
+                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
-                        setMarkerVirtualObj(virtualObj, map, bitmapdraw);
 
                     } else if (virtualObj.getType().equals("candy")) {
 
-                        BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.candy);
-
-                        setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                        try {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.candy);
+                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     } else {
 
-                        BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.artifact);
-
-                        setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                        try {
+                            BitmapDrawable bitmapdraw = (BitmapDrawable)context.getResources().getDrawable(R.drawable.artifact);
+                            setMarkerVirtualObj(virtualObj, map, bitmapdraw);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                     }
 
@@ -238,7 +268,7 @@ public class MainViewModel extends ViewModel {
 
                 if(marker.getTag().getClass() == VirtualObj.class) {
 
-                    setBattleDialog(context, marker, userDBHelper, sharedViewModel, sid);
+                    setBattleDialog(context, marker, userDBHelper, sharedViewModel, sid, map);
 
                     return false;
                 }
@@ -248,6 +278,8 @@ public class MainViewModel extends ViewModel {
 
                 Bundle bundle = new Bundle();
 
+                bundle.putString("sid", sid);
+                bundle.putInt("uid", p.getUid());
                 bundle.putString("origin", "main");
                 bundle.putString("name", p.getName());
                 bundle.putString("expPoints", String.format("%02d", p.getExpPoits()));
@@ -269,7 +301,7 @@ public class MainViewModel extends ViewModel {
 
     }
 
-    private void setBattleDialog(Context context, Marker marker, UserDBHelper userDBHelper, SharedViewModel sharedViewModel, String sid) {
+    private void setBattleDialog(Context context, Marker marker, UserDBHelper userDBHelper, SharedViewModel sharedViewModel, String sid, GoogleMap map) {
 
         VirtualObj virtualObj = (VirtualObj) marker.getTag();
 
@@ -327,10 +359,15 @@ public class MainViewModel extends ViewModel {
 
                                     if(result.died == true) {
 
+                                        map.clear();
+                                        markerList.clear();
+
                                         new MaterialAlertDialogBuilder(context)
                                                 .setTitle("GAME OVER")
                                                 .setMessage("You died in this fight, all the artifacts you had are lost...")
                                                 .setNegativeButton("Ok", (dialog1, which1) -> {
+                                                    map.clear();
+                                                    markerList.clear();
                                                     dialog1.dismiss();
                                                 })
                                                 .show();
@@ -376,6 +413,9 @@ public class MainViewModel extends ViewModel {
                         ResponseUserData result = response.body();
 
                         if(result.died == true) {
+
+                            map.clear();
+                            markerList.clear();
 
                             new MaterialAlertDialogBuilder(context)
                                     .setTitle("GAME OVER")
@@ -459,13 +499,6 @@ public class MainViewModel extends ViewModel {
 
         marker.setTag(virtualObj);
         markerList.add(marker);
-
-    }
-
-    public void checkSovrapposition() {
-
-        //filter markerList by lat and lon
-        //for
 
     }
 

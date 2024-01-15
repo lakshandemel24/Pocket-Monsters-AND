@@ -287,7 +287,7 @@ public class MainFragment extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         LocationRequest locationRequest =
-                new LocationRequest.Builder(8000)
+                new LocationRequest.Builder(5000)
                         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                         .build();
 

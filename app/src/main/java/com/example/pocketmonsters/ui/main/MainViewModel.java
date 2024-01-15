@@ -53,6 +53,7 @@ public class MainViewModel extends ViewModel {
     private final MainModel mainModel;
     private RetrofitProvider retrofitProvider = new RetrofitProvider();
     double maxDistance = 100;
+    List<Marker> markerList = new ArrayList<>();
     public MainViewModel() {
         super();
         mainModel = new MainModel();
@@ -64,7 +65,7 @@ public class MainViewModel extends ViewModel {
 
     public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v) {
 
-        map.clear();
+        //map.clear();
 
         sid = sharedViewModel.getUser().getValue().getSid();
         sharedViewModelM = sharedViewModel;
@@ -410,6 +411,15 @@ public class MainViewModel extends ViewModel {
 
     public void setMarkerPlayer(Player player, GoogleMap map, BitmapDrawable bitmapdraw) {
 
+        for(Marker marker : markerList) {
+            if(marker.getTag().getClass() == Player.class) {
+                Player p = (Player) marker.getTag();
+                if(p.getLat() == player.getLat() && p.getLon() == player.getLon()) {
+                    return;
+                }
+            }
+        }
+
         int height = 100;
         int width = 100;
         Bitmap b = bitmapdraw.getBitmap();
@@ -427,6 +437,15 @@ public class MainViewModel extends ViewModel {
 
     public void setMarkerVirtualObj(VirtualObj virtualObj, GoogleMap map, BitmapDrawable bitmapdraw) {
 
+        for(Marker marker : markerList) {
+            if(marker.getTag().getClass() == VirtualObj.class) {
+                VirtualObj v = (VirtualObj) marker.getTag();
+                if(v.getLat() == virtualObj.getLat() && v.getLon() == virtualObj.getLon()) {
+                    return;
+                }
+            }
+        }
+
         int height = 150;
         int width = 150;
         Bitmap b = bitmapdraw.getBitmap();
@@ -439,6 +458,14 @@ public class MainViewModel extends ViewModel {
         );
 
         marker.setTag(virtualObj);
+        markerList.add(marker);
+
+    }
+
+    public void checkSovrapposition() {
+
+        //filter markerList by lat and lon
+        //for
 
     }
 

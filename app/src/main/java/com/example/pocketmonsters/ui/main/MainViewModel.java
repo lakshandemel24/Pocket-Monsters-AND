@@ -72,7 +72,7 @@ public class MainViewModel extends ViewModel {
         MainRepository mainRepository = new MainRepository(sid);
 
         mainRepository.getNearbyPlayers(sid, lat, lon, new MainPlayersListener() {
-
+//TO UPGRADEEEEEE
             @Override
             public void onSuccess(List<Player> userList) {
 
@@ -242,6 +242,7 @@ public class MainViewModel extends ViewModel {
                     return false;
                 }
 
+//TO UPGRADEEEEEE
                 Player p = (Player) marker.getTag();
 
                 Bundle bundle = new Bundle();
@@ -409,8 +410,8 @@ public class MainViewModel extends ViewModel {
 
     public void setMarkerPlayer(Player player, GoogleMap map, BitmapDrawable bitmapdraw) {
 
-        int height = 80;
-        int width = 80;
+        int height = 100;
+        int width = 100;
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 

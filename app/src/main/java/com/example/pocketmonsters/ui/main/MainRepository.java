@@ -49,11 +49,8 @@ public class MainRepository {
                     double distance = calculateDistance(lat, lon, obj.lat, obj.lon);
                     count++;
 
-                    if(resultList.size() == count) {
-                        mainPlayersListener.onSuccess(players);
-                    }
 
-                    if(distance < 100) {
+                    if(distance < 80) {
 
                         Call<ResponseUsersId> call2 = retrofitProvider.getApiInterface().getUser(obj.uid, sid);
                         call2.enqueue(new Callback<ResponseUsersId>() {
@@ -64,6 +61,8 @@ public class MainRepository {
                                     return;
                                 }
                                 ResponseUsersId result = response.body();
+
+                                Log.d("Lakaka", "+1");
 
                                 Player player = new Player(result.name, result.experience, result.life, result.picture);
                                 player.setPositionSharing(result.positionshare);
@@ -82,6 +81,10 @@ public class MainRepository {
                             }
                         });
 
+                    } else {
+                        if(resultList.size() == count) {
+                            mainPlayersListener.onSuccess(players);
+                        }
                     }
 
                 }

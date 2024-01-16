@@ -95,12 +95,39 @@ public class NearbyViewHolder extends RecyclerView.ViewHolder{
         level = virtualObj.getLevel();
 
         if(virtualObj.getImage() != null) {
+
             byte[] imageByteArray = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
 
             Glide.with(itemView.getContext())
                     .asBitmap()
                     .load(imageByteArray)
                     .into(image);
+        } else {
+
+            if(type.equals("monster")) {
+
+                Glide.with(itemView.getContext())
+                        .asBitmap()
+                        .load(R.drawable.monster)
+                        .into(image);
+
+            } else if(type.equals("candy")) {
+
+                Glide.with(itemView.getContext())
+                        .asBitmap()
+                        .load(R.drawable.candy)
+                        .into(image);
+
+            } else if (type.equals("weapon") || type.equals("armor") || type.equals("amulet")) {
+
+                Glide.with(itemView.getContext())
+                        .asBitmap()
+                        .load(R.drawable.artifact)
+                        .into(image);
+
+            }
+
+
         }
 
 

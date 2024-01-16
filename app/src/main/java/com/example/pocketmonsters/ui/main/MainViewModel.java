@@ -65,8 +65,6 @@ public class MainViewModel extends ViewModel {
 
     public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v, boolean playerVisibility) {
 
-        //map.clear();
-
         sid = sharedViewModel.getUser().getValue().getSid();
         sharedViewModelM = sharedViewModel;
 
@@ -273,7 +271,7 @@ public class MainViewModel extends ViewModel {
                     return false;
                 }
 
-//TO UPGRADEEEEEE
+
                 Player p = (Player) marker.getTag();
 
                 Bundle bundle = new Bundle();
@@ -321,15 +319,42 @@ public class MainViewModel extends ViewModel {
         expPoints.setText(virtualObj.getType());
         lifePoints.setText("lv. " + virtualObj.getLevel());
 
-        if(virtualObj.getImage() != null) {
+        if(virtualObj.getImage() == null) {
 
-            byte[] imageByteArray = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
+            String type = virtualObj.getType();
 
-            Glide.with(context)
-                    .asBitmap()
-                    .load(imageByteArray)
-                    .into(profilePicture);
+            if(type.equals("monster")) {
 
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.monster)
+                        .into(profilePicture);
+
+            } else if(type.equals("candy")) {
+
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.candy)
+                        .into(profilePicture);
+
+            } else if (type.equals("weapon") || type.equals("armor") || type.equals("amulet")) {
+
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.artifact)
+                        .into(profilePicture);
+
+            }
+
+
+        } else {
+
+                byte[] imageByteArray = Base64.decode(virtualObj.getImage(), Base64.DEFAULT);
+
+                Glide.with(context)
+                        .asBitmap()
+                        .load(imageByteArray)
+                        .into(profilePicture);
         }
 
         if(virtualObj.getType().equals("monster")) {
@@ -366,8 +391,6 @@ public class MainViewModel extends ViewModel {
                                                 .setTitle("GAME OVER")
                                                 .setMessage("You died in this fight, all the artifacts you had are lost...")
                                                 .setNegativeButton("Ok", (dialog1, which1) -> {
-                                                    map.clear();
-                                                    markerList.clear();
                                                     dialog1.dismiss();
                                                 })
                                                 .show();
@@ -452,11 +475,15 @@ public class MainViewModel extends ViewModel {
     public void setMarkerPlayer(Player player, GoogleMap map, BitmapDrawable bitmapdraw) {
 
         for(Marker marker : markerList) {
+
             if(marker.getTag().getClass() == Player.class) {
+
                 Player p = (Player) marker.getTag();
+
                 if(p.getLat() == player.getLat() && p.getLon() == player.getLon()) {
                     return;
                 }
+
             }
         }
 
@@ -478,11 +505,15 @@ public class MainViewModel extends ViewModel {
     public void setMarkerVirtualObj(VirtualObj virtualObj, GoogleMap map, BitmapDrawable bitmapdraw) {
 
         for(Marker marker : markerList) {
+
             if(marker.getTag().getClass() == VirtualObj.class) {
+
                 VirtualObj v = (VirtualObj) marker.getTag();
+
                 if(v.getLat() == virtualObj.getLat() && v.getLon() == virtualObj.getLon()) {
                     return;
                 }
+
             }
         }
 

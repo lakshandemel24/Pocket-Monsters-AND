@@ -63,7 +63,14 @@ public class MainViewModel extends ViewModel {
         return mainModel.getUser();
     }
 
-    public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v, boolean playerVisibility) {
+    public void addMarkers(GoogleMap map, double lat, double lon, VirtualObjDBHelper virtualObjDBHelper, SharedViewModel sharedViewModel, UserDBHelper userDBHelper, Context context, View v, boolean playerVisibility, int refreshCounter) {
+
+        if(refreshCounter == 20) {
+            Log.d("Lakko", "refreshing");
+            map.clear();
+            markerList.clear();
+            return;
+        }
 
         sid = sharedViewModel.getUser().getValue().getSid();
         sharedViewModelM = sharedViewModel;
@@ -72,7 +79,7 @@ public class MainViewModel extends ViewModel {
 
         if(playerVisibility) {
             mainRepository.getNearbyPlayers(sid, lat, lon, new MainPlayersListener() {
-                //TO UPGRADEEEEEE
+
                 @Override
                 public void onSuccess(List<Player> userList) {
 
@@ -492,13 +499,19 @@ public class MainViewModel extends ViewModel {
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-        Marker marker = map.addMarker(new MarkerOptions()
-                .position(new LatLng(player.getLat(), player.getLon()))
-                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                .draggable(true)
-        );
+        try{
 
-        marker.setTag(player);
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(new LatLng(player.getLat(), player.getLon()))
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                    .draggable(true)
+            );
+
+            marker.setTag(player);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -522,14 +535,20 @@ public class MainViewModel extends ViewModel {
         Bitmap b = bitmapdraw.getBitmap();
         Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
 
-        Marker marker = map.addMarker(new MarkerOptions()
-                .position(new LatLng(virtualObj.getLat(), virtualObj.getLon()))
-                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                .draggable(true)
-        );
+        try{
 
-        marker.setTag(virtualObj);
-        markerList.add(marker);
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(new LatLng(virtualObj.getLat(), virtualObj.getLon()))
+                    .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                    .draggable(true)
+            );
+
+            marker.setTag(virtualObj);
+            markerList.add(marker);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

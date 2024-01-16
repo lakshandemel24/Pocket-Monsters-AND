@@ -79,6 +79,8 @@ public class MainFragment extends Fragment {
     Switch switcherPlayerVisibility;
     boolean playerVisibility = true;
     View v;
+    int refreshCounter = 0;
+
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @Override
@@ -122,7 +124,9 @@ public class MainFragment extends Fragment {
                         Toast.makeText(getContext(), "Players visibility deactivated", Toast.LENGTH_SHORT).show();
                     }
 
-                    viewModel.addMarkers(mMap, mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude(), virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility);
+                    refreshCounter = 0;
+
+                    viewModel.addMarkers(mMap, mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude(), virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility,refreshCounter);
                 });
 
 
@@ -132,8 +136,13 @@ public class MainFragment extends Fragment {
 
                         binding.loadingBar.setVisibility(View.GONE);
 
+                        if(refreshCounter == 21) {
+                            refreshCounter = 0;
+                        }
+
                         if(sharedViewModel.getUser().getValue() != null) {
-                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility);
+                            refreshCounter ++;
+                            viewModel.addMarkers(mMap, lat, lon, virtualObjDBHelper, sharedViewModel, userDBHelper, getContext(), v, playerVisibility, refreshCounter);
                         }
 
                     }
@@ -301,7 +310,7 @@ public class MainFragment extends Fragment {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         LocationRequest locationRequest =
-                new LocationRequest.Builder(2500)
+                new LocationRequest.Builder(1500)
                         .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                         .build();
 

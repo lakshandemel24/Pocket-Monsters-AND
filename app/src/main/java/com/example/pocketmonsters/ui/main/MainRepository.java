@@ -115,48 +115,54 @@ public class MainRepository {
                         continue;
                     }
 
-                    if(virtualObjDBHelper.loadById(obj.id) == null) {
+                    try {
 
-                        Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
-                        call2.enqueue(new Callback<ObjectsResponseId>() {
-                            @Override
-                            public void onResponse(Call<ObjectsResponseId> call2, retrofit2.Response<ObjectsResponseId> response) {
-                                if (!response.isSuccessful()) {
-                                    Log.d("Lak-MainRepository", "Error: " + response.code());
+                        if(virtualObjDBHelper.loadById(obj.id) == null) {
+
+                            Call<ObjectsResponseId> call2 = retrofitProvider.getApiInterface().getObject(obj.id, sid);
+                            call2.enqueue(new Callback<ObjectsResponseId>() {
+                                @Override
+                                public void onResponse(Call<ObjectsResponseId> call2, retrofit2.Response<ObjectsResponseId> response) {
+                                    if (!response.isSuccessful()) {
+                                        Log.d("Lak-MainRepository", "Error: " + response.code());
+                                        mainVirtualObjsListener.onFailure();
+                                        return;
+                                    }
+                                    ObjectsResponseId resultById = response.body();
+
+                                    VirtualObj virtualObj = new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon);
+
+                                    try {
+                                        virtualObjDBHelper.insert(virtualObj);
+                                    } catch (Exception e) {
+                                        Log.d("errore", "id " + resultById.id);
+                                        e.printStackTrace();
+                                    }
+
+                                    virtualObjs.add(virtualObj);
+
+                                    if(result.size() == count) {
+                                        mainVirtualObjsListener.onSuccess(virtualObjs);
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<ObjectsResponseId> call, Throwable t) {
+                                    Log.d("Lak-MainRepository", "Error: " + t.getMessage());
                                     mainVirtualObjsListener.onFailure();
-                                    return;
                                 }
-                                ObjectsResponseId resultById = response.body();
+                            });
 
-                                VirtualObj virtualObj = new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon);
+                        } else {
+                            VirtualObj virtualObj = virtualObjDBHelper.loadById(obj.id);
+                            virtualObjs.add(virtualObj);
 
-                                try {
-                                    virtualObjDBHelper.insert(virtualObj);
-                                } catch (Exception e) {
-                                    Log.d("errore", "id " + resultById.id);
-                                    e.printStackTrace();
-                                }
-
-                                virtualObjs.add(virtualObj);
-
-                                if(result.size() == count) {
-                                    mainVirtualObjsListener.onSuccess(virtualObjs);
-                                }
+                            if(result.size() == count) {
+                                mainVirtualObjsListener.onSuccess(virtualObjs);
                             }
-                            @Override
-                            public void onFailure(Call<ObjectsResponseId> call, Throwable t) {
-                                Log.d("Lak-MainRepository", "Error: " + t.getMessage());
-                                mainVirtualObjsListener.onFailure();
-                            }
-                        });
-
-                    } else {
-                        VirtualObj virtualObj = virtualObjDBHelper.loadById(obj.id);
-                        virtualObjs.add(virtualObj);
-
-                        if(result.size() == count) {
-                            mainVirtualObjsListener.onSuccess(virtualObjs);
                         }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
 
                 }

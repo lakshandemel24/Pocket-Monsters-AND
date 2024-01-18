@@ -275,7 +275,7 @@ public class MainFragment extends Fragment {
         } else {
             // No location access granted.
             Log.d(TAG, "Permissions required to access the application!");
-            showErrorText("Permissions required to access the application!");
+            showErrorText("Locatio permissions required to access the application!");
         }
     }
 
@@ -405,7 +405,7 @@ public class MainFragment extends Fragment {
                 .setCancelable(false)
                 .setPositiveButton("Ok", (dialog, which) -> {
                     dialog.dismiss();
-                    //getActivity().finishAffinity();
+                    getActivity().finishAffinity();
                 })
                 .show();
 

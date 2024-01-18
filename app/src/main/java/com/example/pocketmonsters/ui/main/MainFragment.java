@@ -135,6 +135,7 @@ public class MainFragment extends Fragment {
                     public void onSuccess(double lat, double lon) {
 
                         binding.loadingBar.setVisibility(View.GONE);
+                        binding.hide.setVisibility(View.VISIBLE);
 
                         if(refreshCounter == 21) {
                             refreshCounter = 0;
@@ -273,8 +274,8 @@ public class MainFragment extends Fragment {
             initMap();
         } else {
             // No location access granted.
-            Log.d(TAG, "Permessi necessari per accedere alla posizione");
-            showErrorText("Permessi necessari per accedere all'applicazione");
+            Log.d(TAG, "Permissions required to access the application!");
+            showErrorText("Permissions required to access the application!");
         }
     }
 
@@ -321,6 +322,7 @@ public class MainFragment extends Fragment {
                 Log.d(TAG, "onLocationAvailability " + locationAvailability.isLocationAvailable());
                 if (!(locationAvailability.isLocationAvailable())) {
                     Log.d(TAG, "onLocationAvailability: location not available");
+                    //Toast.makeText(getContext(), "Turn on the position to start to play!", Toast.LENGTH_SHORT).show();
                     //showErrorText("Attiva posizione!");
                 } else {
                     Log.d(TAG, "onLocationAvailability: location available");
@@ -388,6 +390,7 @@ public class MainFragment extends Fragment {
 
                     } else {
                         Log.d(TAG, "Location: null");
+                        Toast.makeText(getContext(), "Turn on the position!", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -398,11 +401,11 @@ public class MainFragment extends Fragment {
 
         new MaterialAlertDialogBuilder(getContext())
                 .setTitle("Errore")
-                .setMessage("Attiva posizione!")
+                .setMessage(msg)
                 .setCancelable(false)
                 .setPositiveButton("Ok", (dialog, which) -> {
                     dialog.dismiss();
-                    getActivity().finishAffinity();
+                    //getActivity().finishAffinity();
                 })
                 .show();
 

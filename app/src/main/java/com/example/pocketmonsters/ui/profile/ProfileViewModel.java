@@ -75,7 +75,7 @@ public class ProfileViewModel extends ViewModel {
                          }
 
                          weapon.setOnClickListener(v -> {
-                             showDialog(virtualObj, context);
+                             showDialog(virtualObj, context, "The damage suffered by the monsters will be reduced by " + String.valueOf(virtualObj.getLevel()) + "%");
                          });
 
                      } else if (virtualObj.getType().equals("armor")) {
@@ -91,7 +91,7 @@ public class ProfileViewModel extends ViewModel {
                          }
 
                          armor.setOnClickListener(v -> {
-                             showDialog(virtualObj, context);
+                             showDialog(virtualObj, context, "The maximum number of life points has been increased to " + String.valueOf(virtualObj.getLevel() + 100));
                          });
 
                      } else if (virtualObj.getType().equals("amulet")) {
@@ -107,7 +107,7 @@ public class ProfileViewModel extends ViewModel {
                          }
 
                          amulet.setOnClickListener(v -> {
-                             showDialog(virtualObj, context);
+                             showDialog(virtualObj, context, "The virtual objects are visible up to " + String.valueOf(virtualObj.getLevel() + 100) + " meters");
                          });
 
                      }
@@ -220,11 +220,11 @@ public class ProfileViewModel extends ViewModel {
         return null;
     }
 
-    private void showDialog(VirtualObj virtualObj, Context context) {
+    private void showDialog(VirtualObj virtualObj, Context context, String message) {
 
         new MaterialAlertDialogBuilder(context)
                 .setTitle(virtualObj.getName())
-                .setMessage("Livelo: " + String.valueOf(virtualObj.getLevel()))
+                .setMessage("Livelo: " + String.valueOf(virtualObj.getLevel()) + "\n" + message)
                 .setPositiveButton("Ok", (dialog, which) -> {
                     dialog.dismiss();
                 })

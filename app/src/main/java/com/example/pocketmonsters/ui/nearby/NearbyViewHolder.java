@@ -87,6 +87,8 @@ public class NearbyViewHolder extends RecyclerView.ViewHolder{
 
     public void bind(VirtualObj virtualObj) {
 
+        Log.d("NearbyViewHolder", "bind: " + virtualObj.getName() + " " + virtualObj.getLevel() + " " + virtualObj.getType() + " " + virtualObj.getId() + " " + virtualObj.getLevel());
+
         name.setText(virtualObj.getName());
         levelView.setText("Lv: " + virtualObj.getLevel());
         type = virtualObj.getType();

@@ -17,7 +17,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/hide">
+        android:id="@+id/hide"
+        android:visibility="invisible">
 
         <!-- Top icons -->
         <LinearLayout

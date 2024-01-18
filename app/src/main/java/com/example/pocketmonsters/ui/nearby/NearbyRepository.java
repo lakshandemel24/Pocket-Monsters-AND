@@ -48,10 +48,6 @@ public class NearbyRepository {
                 count = 1;
                 for (ObjectsResponse obj : result) {
 
-                    if(result.size() == count) {
-                        nearbyListener.onSuccess(virtualObjList);
-                    }
-
                     double distance = calculateDistance(lat, lon, obj.lat, obj.lon);
                     count++;
 
@@ -61,6 +57,7 @@ public class NearbyRepository {
 
                             virtualObjList.add(virtualObjDBHelper.loadById(obj.id));
                             if(result.size() == count) {
+                                Log.d("Lak-NearbyRepository", "DB");
                                 nearbyListener.onSuccess(virtualObjList);
                             }
 
@@ -79,6 +76,7 @@ public class NearbyRepository {
                                     virtualObjDBHelper.insert(new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon));
                                     virtualObjList.add(new VirtualObj(resultById.id, resultById.name, resultById.type, resultById.level, resultById.image, resultById.lat, resultById.lon));
                                     if(result.size() == count) {
+                                        Log.d("Lak-NearbyRepository", "API");
                                         nearbyListener.onSuccess(virtualObjList);
                                     }
                                 }
@@ -91,6 +89,11 @@ public class NearbyRepository {
 
                         }
 
+                    } else {
+                        if(result.size() == count) {
+                            Log.d("Lak-NearbyRepository", "other");
+                            nearbyListener.onSuccess(virtualObjList);
+                        }
                     }
 
                 }
